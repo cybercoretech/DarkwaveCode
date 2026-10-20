@@ -6,7 +6,7 @@ DarkwaveCode is a cyberpunk coding workbench focused on learning, safe experimen
 
 This first static preview includes a dedicated full-height `workbench.html` page, linked from the main navigation and home-page calls to action. It provides a draggable problem/editor divider, language starter templates, local draft autosave, a simulated GhostKernel trace, and the Cybercore theme registry. The editor and mission panes have custom neon scrollbars. Its original GhostKernel Field background draws living flow lines and drifting data motes; pointer movement bends the field and taps/clicks emit pulse rings. It follows Cybercore palette changes, pauses when the tab is hidden, and honors reduced-motion preferences. The run button is a teaching simulation, not a compiler. Sign-in and the curl installer are intentionally marked as coming later.
 
-The language picker now has starter previews for C#, PowerShell, PHP, Kotlin, Lua, Assembly, Swift, Ruby, Dart, R, and HTML/CSS in addition to the original ten entries. Other languages from the requested list appear as disabled planned entries. These are templates, not executable runtimes.
+The language picker now has 33 selectable editor templates. Alongside the original set, it includes HTML/CSS, C#, PowerShell, PHP, Kotlin, Lua, Assembly, Swift, Ruby, Dart, R, Zig, Scala, Julia, Perl, Haskell, Clojure, Crystal, Elixir, Elm, Erlang, Groovy, and PureScript. MATLAB, Fortran, Visual Basic .NET, Objective-C, Delphi/Object Pascal, SAS, D, COBOL, and Mojo remain listed as planned. These entries provide starter code only; they are not executable runtimes.
 
 Serve this directory with any static HTTP server. The first production deployment is live at `https://darkwavecode.pages.dev`.
 

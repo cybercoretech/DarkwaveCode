@@ -8,7 +8,7 @@
 - [x] Cybercore theme selection backed by the shared Cybergrid registry.
 - [x] Resizable problem/editor layout with keyboard-accessible divider.
 - [x] Starter templates, local debounced draft persistence, reset, and responsive layout.
-- [x] Expanded language picker: 10 additional starter previews plus HTML/CSS; remaining requested runtimes are listed as planned and disabled.
+- [x] Expanded language picker: 33 selectable starter templates, including Zig, Scala, Julia, Perl, Haskell, Clojure, Crystal, Elixir, Elm, Erlang, Groovy, and PureScript; other requested languages remain listed as planned.
 - [x] GhostKernel device trace simulation with a clear safety boundary.
 - [ ] Replace the textarea with CodeMirror 6 or Monaco after confirming bundle and keymap requirements.
 - [ ] Add Vim/Emacs keymaps and accessible reduced-motion / contrast controls.
