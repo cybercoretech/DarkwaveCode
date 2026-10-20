@@ -14,13 +14,7 @@ Serve this directory with any static HTTP server. The first production deploymen
 
 ### Cloudflare Pages deployment
 
-The current Pages project uses **Direct Upload**. Git pushes update GitHub but do not deploy the live Pages site. With Wrangler installed and authenticated, deploy updates from this checkout with:
-
-```sh
-wrangler pages deploy . --project-name darkwavecode --branch main
-```
-
-Direct Upload does not automatically deploy GitHub pushes. Cloudflare does not allow converting this project to Git integration later; automatic GitHub deployments would require a separate Git-integrated Pages project. The current Pages project is already configured with `main` as its production branch label.
+The current Pages project uses **Direct Upload**, so GitHub pushes need a CI job to publish the site. The workflow at `.github/workflows/pages-deploy.yml` runs Cloudflare's Wrangler Action on every push to `main` and on manual dispatch. Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as GitHub Actions repository secrets. Create the token with account-scoped **Cloudflare Pages: Edit** permission. Cloudflare's native Git integration is a separate option and requires authorizing its GitHub App.
 
 ## Staged build plan
 

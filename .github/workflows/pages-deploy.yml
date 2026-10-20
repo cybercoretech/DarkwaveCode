@@ -1,0 +1,46 @@
+name: Deploy DarkwaveCode to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: darkwavecode-pages-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Publish production site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Check Cloudflare deployment secrets
+        id: cloudflare
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [[ -n "$CLOUDFLARE_API_TOKEN" && -n "$CLOUDFLARE_ACCOUNT_ID" ]]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in repository Settings > Secrets and variables > Actions to enable deployment."
+          fi
+
+      - name: Upload site and Pages Worker
+        if: steps.cloudflare.outputs.ready == 'true'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=darkwavecode --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

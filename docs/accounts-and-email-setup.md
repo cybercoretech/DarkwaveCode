@@ -46,6 +46,15 @@ node /path/to/wrangler/bin/wrangler.js pages deploy . --project-name darkwavecod
 
 `wrangler.jsonc` binds `AUTH_DB` and makes the advanced-mode Pages configuration explicit. Verify `/api/auth/status`, Google sign-in, account registration, verification email, password recovery, sign-out, profile save/reload, and profile visibility after deployment. Use a controlled test inbox before inviting users.
 
+## Automatic deployment from GitHub
+
+The GitHub Actions workflow `.github/workflows/pages-deploy.yml` publishes the Direct Upload project on every push to `main`. Add these repository secrets at **Settings → Secrets and variables → Actions**:
+
+- `CLOUDFLARE_API_TOKEN`: an account API token with **Cloudflare Pages: Edit** permission, scoped to the account hosting this project.
+- `CLOUDFLARE_ACCOUNT_ID`: `f770e07e62b976b12330421edcf2a7d9`.
+
+The token is intentionally not stored in the repository or in the workflow. Until both secrets exist, GitHub Actions cannot deploy. Cloudflare's official guide describes this Direct Upload CI setup: https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/.
+
 ## User profile fields
 
 Profiles support a unique handle, display name, 400-character bio, favorite language, experience level, Cybercore theme, public/member/private visibility, activity visibility, and optional release emails. Email and Google identity are private. Avatars include eight original SVG portraits, emoji choices, and a browser-resized PNG/JPEG/WebP upload.
