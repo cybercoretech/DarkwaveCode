@@ -4,7 +4,7 @@
 
 **Status:** prototype ready for review.
 
-- [x] Cyberpunk identity, responsive layout, and the original interactive GhostKernel Field canvas background.
+- [x] Cyberpunk identity, responsive layout, dedicated full-height workbench page, custom scrollbar styling, and the original interactive GhostKernel Field canvas background.
 - [x] Cybercore theme selection backed by the shared Cybergrid registry.
 - [x] Resizable problem/editor layout with keyboard-accessible divider.
 - [x] Starter templates, local debounced draft persistence, reset, and responsive layout.
