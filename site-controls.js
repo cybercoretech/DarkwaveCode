@@ -1,9 +1,6 @@
 (() => {
-  const page = location.pathname.endsWith('workbench.html') ? 'workbench'
-    : location.pathname.endsWith('ghostkernel.html') ? 'ghostkernel'
-      : location.pathname.endsWith('course.html') ? 'course'
-        : location.pathname.endsWith('profile.html') ? 'profile'
-          : location.pathname.endsWith('community.html') ? 'community' : 'home';
+  const routeName=location.pathname.replace(/\/+$/,'').split('/').pop()||'home';
+  const page=({workbench:'workbench.html',ghostkernel:'ghostkernel.html',course:'course.html',profile:'profile.html',community:'community.html',templates:'templates.html'})[routeName]||({workbench:'workbench',ghostkernel:'ghostkernel',course:'course',profile:'profile',community:'community',templates:'templates'})[routeName]||'home';
   fetch('/api/telemetry', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'page',label:page}),keepalive:true}).catch(()=>{});
   const footer=document.querySelector('.dw-site-footer'),bottom=footer?.querySelector('.dw-footer-bottom');
   if(bottom){const notice=document.createElement('p');notice.className='dw-telemetry-note';notice.textContent='PRIVACY SIGNAL / aggregate page and run totals only · no source code or account identity stored';footer.insertBefore(notice,bottom)}

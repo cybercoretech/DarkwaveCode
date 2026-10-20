@@ -84,7 +84,7 @@ async function route(request,env) {
     const ip=(request.headers.get('CF-Connecting-IP')||'unknown').slice(0,80),key=`telemetry:${(await digest(ip)).slice(0,32)}`;await authRate(db,key,160);
     const body=await bodyJSON(request,1000),event=body.event,label=clean(body.label,40);
     if(event==='run'&&!LANGUAGE_IDS.has(label))throw fail('Choose a supported language for telemetry.');
-    if(event==='page'&&!new Set(['home','workbench','ghostkernel','course','profile','community']).has(label))throw fail('Choose a supported page for telemetry.');
+    if(event==='page'&&!new Set(['home','workbench','ghostkernel','course','profile','community','templates']).has(label))throw fail('Choose a supported page for telemetry.');
     if(event==='course_complete'&&!COURSE_IDS.has(label))throw fail('Choose a supported course for telemetry.');
     if(!['run','page','course_complete'].includes(event))throw fail('Choose a supported telemetry event.');
     const success=event==='run'&&body.success===true?1:0,duration=event==='run'&&Number.isFinite(body.durationMs)?Math.max(0,Math.min(120000,Math.round(body.durationMs))):0,day=new Date().toISOString().slice(0,10);

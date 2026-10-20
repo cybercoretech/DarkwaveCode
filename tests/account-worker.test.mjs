@@ -94,3 +94,9 @@ test('admin console shortcut APIs enforce the verified Google admin role',async(
  const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/admin/overview',{headers:{Cookie:'dwc_session=test-session'}}),{AUTH_DB:fakeDb(owner),ADMIN_EMAIL:'darkstardevx@gmail.com',SITE_ORIGIN:'https://darkwavecode.pages.dev'});
  assert.equal(response.status,200);const data=await response.json();assert.equal(data.health.accountDatabase,true);assert.ok(Array.isArray(data.reports));assert.ok(Array.isArray(data.hiddenContent));
 });
+
+
+test('aggregate telemetry accepts the Template Vault route',async()=>{
+ const db=fakeDb(),response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/telemetry',{method:'POST',headers:{Origin:'https://darkwavecode.pages.dev','Content-Type':'application/json'},body:JSON.stringify({event:'page',label:'templates'})}),{AUTH_DB:db,SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(response.status,200);assert.ok(db.writes.some(write=>write.sql.includes('INSERT INTO telemetry_daily')&&write.args.includes('templates')));
+});
