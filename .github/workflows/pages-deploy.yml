@@ -36,11 +36,16 @@ jobs:
             echo "::warning::Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in repository Settings > Secrets and variables > Actions to enable deployment."
           fi
 
+      - name: Prepare public site assets
+        run: |
+          mkdir -p "$RUNNER_TEMP/darkwavecode-pages"
+          cp -a ./*.html ./*.css ./*.js ./_headers ./favicon.svg ./data ./avatars "$RUNNER_TEMP/darkwavecode-pages/"
+
       - name: Upload site and Pages Worker
         if: steps.cloudflare.outputs.ready == 'true'
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=darkwavecode --branch=main
+          command: pages deploy ${{ runner.temp }}/darkwavecode-pages --project-name=darkwavecode --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
