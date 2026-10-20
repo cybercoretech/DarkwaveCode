@@ -6,7 +6,17 @@ DarkwaveCode is a cyberpunk coding workbench focused on learning, safe experimen
 
 This first static preview includes a responsive workbench, draggable problem/editor divider, language starter templates, local draft autosave, a simulated GhostKernel trace, and the Cybercore theme registry. The run button is a teaching simulation, not a compiler. Sign-in and the curl installer are intentionally marked as coming later.
 
-Serve this directory with any static HTTP server. For Cloudflare Pages, use the `main` branch, root directory `/`, no build command, and output directory `/`. The planned Pages project name is `darkwavecode` (`darkwavecode.pages.dev`).
+Serve this directory with any static HTTP server. The first production deployment is live at `https://darkwavecode.pages.dev`.
+
+### Cloudflare Pages deployment
+
+The current Pages project uses **Direct Upload**. With Wrangler installed and authenticated, deploy updates from this checkout with:
+
+```sh
+wrangler pages deploy . --project-name darkwavecode --branch main
+```
+
+Direct Upload does not automatically deploy GitHub pushes. Cloudflare does not allow converting this project to Git integration later; automatic GitHub deployments would require a separate Git-integrated Pages project. The current Pages project is already configured with `main` as its production branch label.
 
 ## Staged build plan
 
@@ -28,4 +38,4 @@ Serve this directory with any static HTTP server. For Cloudflare Pages, use the 
 
 ## Current status
 
-Stage 1 visual/workbench prototype is local and reviewable. Real compilation, accounts, courses, judging, ratings, and an installer remain unimplemented. See `docs/ROADMAP.md` for acceptance criteria and milestone status.
+Stage 1 visual/workbench prototype is live. Real compilation, accounts, courses, judging, ratings, and an installer remain unimplemented. See `docs/ROADMAP.md` for acceptance criteria and milestone status.
