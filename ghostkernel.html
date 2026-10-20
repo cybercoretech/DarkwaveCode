@@ -4,6 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080910">
 <meta name="description" content="Enter GhostKernel, a safe interactive systems lab for exploring memory maps, simulated devices, and system calls.">
 <title>GhostKernel — DarkwaveCode Systems Lab</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="ghostkernel.css">
 </head>
@@ -32,6 +33,33 @@
   <section class="gk-concepts"><div class="gk-section-heading"><div><p class="eyebrow">02 / UNDER THE HOOD</p><h2>SMALL MACHINE. <span>BIG IDEAS.</span></h2></div><p class="concept-intro">A safe model for the invisible rules that keep a real operating system alive.</p></div><div class="concept-grid"><article><span>01 / MMU</span><div class="concept-icon">▥</div><h3>MEMORY BOUNDARIES</h3><p>See how address regions separate privileged kernel memory, device registers, user space, and I/O.</p><div class="concept-line"><i style="--line-fill:82%"></i></div></article><article><span>02 / SYSCALL</span><div class="concept-icon">⌁</div><h3>THE SYSTEM CALL</h3><p>Follow a controlled request as it crosses from a user program into the simulated kernel.</p><div class="concept-line"><i style="--line-fill:61%"></i></div></article><article><span>03 / DEVICE</span><div class="concept-icon">◈</div><h3>VIRTUAL HARDWARE</h3><p>Wake and idle a tiny relay. Its state changes only inside this teaching model.</p><div class="concept-line"><i style="--line-fill:73%"></i></div></article><article><span>04 / ISOLATION</span><div class="concept-icon">⛨</div><h3>SAFE BY DESIGN</h3><p>No compiler, host calls, uploaded code, or privileged execution. The trace is deterministic and bounded.</p><div class="concept-line"><i style="--line-fill:94%"></i></div></article></div></section>
   <section class="gk-bottom-callout"><div><p class="eyebrow">READY TO READ THE MACHINE?</p><h2>TAKE IT TO THE <span>WORKBENCH.</span></h2><p>Explore the C lesson and inspect its simulated syscall from the full-size editor.</p></div><a class="button primary" href="workbench.html">OPEN THE WORKBENCH <b>↗</b></a></section>
 </main>
-<footer class="footer gk-footer"><a class="brand" href="index.html#top"><span class="brand-mark">DW<span>_</span></span><span>DARKWAVE<em>CODE</em></span></a><span>GHOSTKERNEL · SIMULATION ONLY · NOTHING LEAVES THIS PAGE</span><span><a href="index.html">BACK TO THE SITE ↗</a></span></footer>
+<footer class="dw-site-footer">
+  <div class="dw-footer-divider" aria-hidden="true"></div>
+  <div class="shell dw-footer-grid">
+    <section class="dw-footer-contact">
+      <p class="dw-footer-label">DIRECT CONTACT</p>
+      <a class="dw-footer-email" href="mailto:darkwavecode@cybercoretech.net">darkwavecode@cybercoretech.net</a>
+      <small>DARKWAVECODE / DIRECT INBOX</small>
+      <p class="dw-footer-label dw-security-label">SECURITY</p>
+      <a class="dw-footer-email" href="mailto:security@cybercoretech.net">security@cybercoretech.net</a>
+      <small>VULNERABILITY REPORTS / PRIVATE INBOX</small>
+    </section>
+    <section class="dw-footer-signals">
+      <p class="dw-footer-label">SIGNAL CHANNELS</p>
+      <a class="dw-footer-home" href="https://darkwavecode.pages.dev/" target="_blank" rel="noopener noreferrer"><span class="dw-signal-glyph">⌘</span><span><small>HOME BASE</small><strong>DARKWAVECODE</strong><em>THE CYBERPUNK CODING WORKBENCH</em></span><b>→</b></a>
+      <a class="dw-signal-link" href="https://github.com/cybercoretech/DarkwaveCode" target="_blank" rel="noopener noreferrer"><span>GH</span> GITHUB <i>/ DARKWAVECODE</i> ↗</a>
+      <a class="dw-signal-link" href="https://discord.gg/vBMcK5wAx" target="_blank" rel="noopener noreferrer"><span>DC</span> DISCORD <i>/ CYBERCORE</i> ↗</a>
+      <a class="dw-signal-link" href="https://dev.to/cybercore-tech" target="_blank" rel="noopener noreferrer"><span>DV</span> DEV.TO <i>/ CYBERCORE-TECH</i> ↗</a>
+      <a class="dw-signal-link" href="https://www.reddit.com/user/cybercore_sh/" target="_blank" rel="noopener noreferrer"><span>RD</span> REDDIT <i>/ CYBERCORE_SH</i> ↗</a>
+    </section>
+    <section class="dw-footer-support">
+      <p class="dw-footer-label">SUPPORT THE WORK</p>
+      <a class="dw-donation-button" href="https://buymeacoffee.com/cybercoretech" target="_blank" rel="noopener noreferrer"><span>BM</span> BUY ME A COFFEE ↗</a>
+      <a class="dw-donation-button" href="https://www.paypal.me/elementxdesign" target="_blank" rel="noopener noreferrer"><span>PP</span> DONATE WITH PAYPAL ↗</a>
+      <small>YOUR SUPPORT HELPS KEEP THE PROJECTS ONLINE.</small>
+    </section>
+  </div>
+  <div class="shell dw-footer-bottom"><a class="dw-footer-mark" href="index.html#top" aria-label="DarkwaveCode home">DW<span>_</span></a><span>DARKWAVECODE · CYBERCORE TECH</span><nav aria-label="Footer links"><a href="https://github.com/cybercoretech/DarkwaveCode" target="_blank" rel="noopener noreferrer">GITHUB</a><a href="https://cybercoretech.net/" target="_blank" rel="noopener noreferrer">CYBERCORETECH.NET</a></nav></div>
+</footer>
 <script src="kernel-field.js"></script><script src="ghostkernel.js"></script><script src="app.js"></script>
 </body></html>

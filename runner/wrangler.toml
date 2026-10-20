@@ -1,0 +1,23 @@
+name = "darkwavecode-runner"
+main = "src/index.js"
+compatibility_date = "2026-10-20"
+compatibility_flags = ["nodejs_compat"]
+
+[[durable_objects.bindings]]
+name = "Sandbox"
+class_name = "CodeSandbox"
+
+[[durable_objects.bindings]]
+name = "RUN_LIMITER"
+class_name = "RunLimiter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["CodeSandbox", "RunLimiter"]
+
+[[containers]]
+name = "darkwavecode-runner"
+class_name = "CodeSandbox"
+image = "./Dockerfile"
+instance_type = "basic"
+max_instances = 10

@@ -4,15 +4,15 @@ DarkwaveCode is a cyberpunk coding workbench focused on learning, safe experimen
 
 ## Preview
 
-This static preview includes dedicated `workbench.html` and `ghostkernel.html` pages, linked from the main navigation and home-page preview cards. The workbench provides a draggable problem/editor divider, 33 language starter templates, local draft autosave, a bounded local JavaScript sandbox, and clear template-only messaging for unsupported runtimes. GhostKernel is a separate interactive systems lab with a virtual memory map, device state controls, and syscall event log. Both pages use the Cybercore theme registry and the original GhostKernel Field background, with animated fibers and data motes that respond to pointer movement and taps. The field pauses in hidden tabs and honors reduced-motion preferences. Custom neon scrollbars complete the workbench styling. JavaScript runs in a sandboxed browser worker with a time limit and output cap; the other language choices are templates only, not compilers. Sign-in and the curl installer are intentionally marked as coming later.
+This project includes dedicated `workbench.html` and `ghostkernel.html` pages, linked from the main navigation and home-page preview cards. The workbench provides a draggable problem/editor divider, 33 language starter templates, local code and stdin autosave, a bounded local JavaScript sandbox, and clear template-only messaging for runtimes unavailable to the site. GhostKernel is a separate interactive systems lab with a virtual memory map, device state controls, and syscall event log. Both pages use the Cybercore theme registry and the original GhostKernel Field background, with animated fibers and data motes that respond to pointer movement and taps. The field pauses in hidden tabs and honors reduced-motion preferences. Custom neon scrollbars complete the workbench styling. A Cloudflare sandbox runner implementation is in `runner/` and has passed local smoke tests, but its production endpoint remains unconfigured until its hosting backend is provisioned. Sign-in and the curl installer are intentionally marked as coming later.
 
-The language picker now has 33 selectable editor templates. Alongside the original set, it includes HTML/CSS, C#, PowerShell, PHP, Kotlin, Lua, Assembly, Swift, Ruby, Dart, R, Zig, Scala, Julia, Perl, Haskell, Clojure, Crystal, Elixir, Elm, Erlang, Groovy, and PureScript. MATLAB, Fortran, Visual Basic .NET, Objective-C, Delphi/Object Pascal, SAS, D, COBOL, and Mojo remain listed as planned. These entries provide starter code only; they are not executable runtimes.
+The language picker has 33 selectable editor templates. Alongside the original set, it includes HTML/CSS, C#, PowerShell, PHP, Kotlin, Lua, Assembly, Swift, Ruby, Dart, R, Zig, Scala, Julia, Perl, Haskell, Clojure, Crystal, Elixir, Elm, Erlang, Groovy, and PureScript. MATLAB, Fortran, Visual Basic .NET, Objective-C, Delphi/Object Pascal, SAS, D, COBOL, and Mojo remain listed as planned. Fourteen languages have runner implementations and passed local checks; they become available in the Workbench when a compiler endpoint is configured.
 
 Serve this directory with any static HTTP server. The first production deployment is live at `https://darkwavecode.pages.dev`.
 
 ### Cloudflare Pages deployment
 
-The current Pages project uses **Direct Upload**. With Wrangler installed and authenticated, deploy updates from this checkout with:
+The current Pages project uses **Direct Upload**. Git pushes update GitHub but do not deploy the live Pages site. With Wrangler installed and authenticated, deploy updates from this checkout with:
 
 ```sh
 wrangler pages deploy . --project-name darkwavecode --branch main
@@ -33,11 +33,11 @@ Direct Upload does not automatically deploy GitHub pushes. Cloudflare does not a
 
 - **Static frontend on Cloudflare Pages** under `darkwavecode.pages.dev`; add a custom domain after it is registered.
 - **Browser-first workbench state** for drafts and preferences; account sync is a later opt-in capability.
-- **Isolated judge service** separate from the static frontend. Evaluate a maintained sandbox runner or dedicated container service before exposing arbitrary code execution. Cloudflare Pages alone is not a compiler sandbox.
+- **Isolated runner service** separate from the static frontend. `runner/` implements a Cloudflare Worker + disposable Sandbox/Container backend with network egress disabled, fixed runtime commands, request throttling, code/stdin/output caps, and timeouts. It is not yet provisioned or connected to production. Cloudflare Pages alone is not a compiler sandbox.
 - **GhostKernel simulator** is a deterministic teaching model with documented memory regions, device operations, syscall events, and bounded outputs. It does not load modules or interact with the host kernel.
 - **Theme registry** uses Cybercore's shared Cybergrid palettes and stores each visitor's selected palette in browser storage.
 - **Installer endpoint** is a future deliverable. The homepage's curl panel is illustrative and disabled until a signed, versioned installer exists.
 
 ## Current status
 
-The workbench foundation and starter course paths are live. The JavaScript sandbox runs only JavaScript in a bounded browser worker; native compilers, accounts, judging, ratings, and an installer remain unimplemented. See `docs/ROADMAP.md` for acceptance criteria and milestone status.
+The workbench foundation and starter course paths are live. The JavaScript sandbox runs locally in a bounded browser worker. Fourteen additional runtimes have passed local smoke tests in the runner image, but the remote service is not yet deployed or connected to production. Accounts, full judging, ratings, and an installer remain unimplemented. See `docs/ROADMAP.md` for acceptance criteria and milestone status.

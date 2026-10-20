@@ -1,0 +1,16 @@
+{
+  "name": "darkwavecode-runner",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@cloudflare/sandbox": "next"
+  },
+  "devDependencies": {
+    "wrangler": "4.147.0"
+  }
+}
