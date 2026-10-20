@@ -4,12 +4,12 @@
 
 **Status:** prototype ready for review.
 
-- [x] Cyberpunk identity, responsive layout, dedicated full-height workbench page, custom scrollbar styling, and the original interactive GhostKernel Field canvas background.
+- [x] Cyberpunk identity, responsive layout, dedicated full-height Workbench and interactive GhostKernel lab pages, home-page preview panels, custom scrollbar styling, and the original interactive GhostKernel Field background.
 - [x] Cybercore theme selection backed by the shared Cybergrid registry.
 - [x] Resizable problem/editor layout with keyboard-accessible divider.
 - [x] Starter templates, local debounced draft persistence, reset, and responsive layout.
 - [x] Expanded language picker: 33 selectable starter templates, including Zig, Scala, Julia, Perl, Haskell, Clojure, Crystal, Elixir, Elm, Erlang, Groovy, and PureScript; other requested languages remain listed as planned.
-- [x] GhostKernel device trace simulation with a clear safety boundary.
+- [x] GhostKernel interactive virtual memory inspector, simulated device controls, syscall trace, and clear safety boundary.
 - [ ] Replace the textarea with CodeMirror 6 or Monaco after confirming bundle and keymap requirements.
 - [ ] Add Vim/Emacs keymaps and accessible reduced-motion / contrast controls.
 - [ ] Validate interaction and layouts at desktop, tablet, and phone sizes.
