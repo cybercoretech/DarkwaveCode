@@ -5,9 +5,9 @@ import { readFile } from 'node:fs/promises';
 const source=await readFile(new URL('../_worker.js',import.meta.url),'utf8');
 const {default:worker}=await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
 
-function fakeDb(){
+function fakeDb(user=null){
  const writes=[];
- return {writes,prepare(sql){let args=[];return {bind(...values){args=values;return this},async first(){if(sql.startsWith('SELECT count,window_started'))return null;return null},async run(){writes.push({sql,args});return {success:true}},async all(){return {results:[]}}}},async batch(items){for(const item of items)await item.run()}};
+ return {writes,prepare(sql){let args=[];return {bind(...values){args=values;return this},async first(){if(sql.startsWith('SELECT count,window_started'))return null;if(sql.includes('FROM sessions s JOIN users u'))return user;return null},async run(){writes.push({sql,args});return {success:true}},async all(){return {results:[]}}}},async batch(items){for(const item of items)await item.run()}};
 }
 
 test('static assets pass through the Pages asset binding',async()=>{
@@ -18,6 +18,16 @@ test('static assets pass through the Pages asset binding',async()=>{
 test('account status reports provider readiness without exposing identity data',async()=>{
  const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/auth/status'),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
  assert.deepEqual(await response.json(),{ready:false,emailReady:false,user:null});
+});
+
+test('only the verified Google account configured as administrator receives the admin flag',async()=>{
+ const owner={id:'owner',email:'darkstardevx@gmail.com',email_verified:1,google_sub:'google-sub',handle:'darkstardevx',display_name:'Darkstar Devx'};
+ const request=new Request('https://darkwavecode.pages.dev/api/auth/status',{headers:{Cookie:'dwc_session=test-session'}});
+ const response=await worker.fetch(request,{AUTH_DB:fakeDb(owner),ADMIN_EMAIL:'darkstardevx@gmail.com'});
+ assert.equal((await response.json()).user.isAdmin,true);
+ const passwordOnly={...owner,google_sub:null};
+ const denied=await worker.fetch(request,{AUTH_DB:fakeDb(passwordOnly),ADMIN_EMAIL:'darkstardevx@gmail.com'});
+ assert.equal((await denied.json()).user.isAdmin,false);
 });
 
 test('Google OAuth uses canonical origin, PKCE, and rejects an unsafe return URL',async()=>{

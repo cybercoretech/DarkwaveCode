@@ -30,8 +30,12 @@ async function passwordHash(password,salt) {
   const key=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveBits']);
   return b64(await crypto.subtle.deriveBits({name:'PBKDF2',salt:enc.encode(salt),iterations:210000,hash:'SHA-256'},key,256));
 }
-function safeUser(row,owner=false) {
-  return {id:row.id,handle:row.handle,displayName:row.display_name,bio:row.bio,favoriteLanguage:row.favorite_language,experienceLevel:row.experience_level,avatarKind:row.avatar_kind,avatarValue:row.avatar_value,avatarImage:row.avatar_image||'',theme:row.theme,createdAt:row.created_at, ...(owner?{email:row.email||'',emailVerified:!!row.email_verified,googleLinked:!!row.google_sub,profileVisibility:row.profile_visibility,showActivity:!!row.show_activity,emailProductUpdates:!!row.email_product_updates}:{})};
+function isSiteAdmin(row,env) {
+  const adminEmail=clean(env.ADMIN_EMAIL,254).toLowerCase();
+  return !!adminEmail&&!!row?.google_sub&&!!row.email_verified&&row.email?.toLowerCase()===adminEmail;
+}
+function safeUser(row,owner=false,env={}) {
+  return {id:row.id,handle:row.handle,displayName:row.display_name,bio:row.bio,favoriteLanguage:row.favorite_language,experienceLevel:row.experience_level,avatarKind:row.avatar_kind,avatarValue:row.avatar_value,avatarImage:row.avatar_image||'',theme:row.theme,createdAt:row.created_at, ...(owner?{email:row.email||'',emailVerified:!!row.email_verified,googleLinked:!!row.google_sub,isAdmin:isSiteAdmin(row,env),profileVisibility:row.profile_visibility,showActivity:!!row.show_activity,emailProductUpdates:!!row.email_product_updates}:{})};
 }
 async function currentUser(request,env) {
   const raw=cookieValue(request,COOKIE); if(!raw||!env.AUTH_DB)return null;
@@ -69,7 +73,7 @@ async function route(request,env) {
   if(!db)return json({error:'Accounts are not connected yet. The site administrator must finish Cloudflare D1 setup.'},503);
   if(request.method==='OPTIONS')return new Response(null,{status:204,headers:{Allow:'GET, POST, PUT, OPTIONS'}});
   if(path==='/api/auth/status'&&request.method==='GET'){
-    const user=await currentUser(request,env); return json({ready:!!env.GOOGLE_CLIENT_ID&&!!env.GOOGLE_CLIENT_SECRET, emailReady:!!env.EMAIL||(!!env.CF_EMAIL_API_TOKEN&&!!env.CF_ACCOUNT_ID), user:user?safeUser(user,true):null});
+    const user=await currentUser(request,env); return json({ready:!!env.GOOGLE_CLIENT_ID&&!!env.GOOGLE_CLIENT_SECRET, emailReady:!!env.EMAIL||(!!env.CF_EMAIL_API_TOKEN&&!!env.CF_ACCOUNT_ID), user:user?safeUser(user,true,env):null});
   }
   if(path==='/api/auth/google'&&request.method==='GET'){
     if(!env.GOOGLE_CLIENT_ID||!env.GOOGLE_CLIENT_SECRET)return json({error:'Google sign-in is not configured yet.'},503);
@@ -152,7 +156,7 @@ async function route(request,env) {
     const salt=user?.password_salt||randomToken(16),attempt=await passwordHash(password,salt);
     if(!user?.password_hash||!sameSecret(attempt,user.password_hash))throw fail('Email or password is incorrect.',401);
     if(!user.email_verified)throw fail('Verify your email first. Use the resend link to get a fresh message.',403);
-    return json({ok:true,user:safeUser(user,true)},200,{'Set-Cookie':sessionCookie(await startSession(db,user.id))});
+    return json({ok:true,user:safeUser(user,true,env)},200,{'Set-Cookie':sessionCookie(await startSession(db,user.id))});
   }
   if(path==='/api/auth/email/resend'&&request.method==='POST'){
     const body=await bodyJSON(request),email=clean(body.email,254).toLowerCase(),user=await db.prepare('SELECT * FROM users WHERE email=? AND email_verified=0').bind(email).first();
@@ -184,7 +188,7 @@ async function route(request,env) {
     if(handle){row=await db.prepare('SELECT * FROM users WHERE handle=?').bind(handle).first();if(!row)throw fail('Profile not found.',404);if(row.profile_visibility==='private'&&row.id!==user?.id)throw fail('This profile is private.',404);if(row.profile_visibility==='members'&&!user)throw fail('Sign in to view this profile.',401);}
     else row=user;
     if(!row)throw fail('Sign in to manage your profile.',401);
-    return json({user:safeUser(row,row.id===user?.id),owner:row.id===user?.id});
+    return json({user:safeUser(row,row.id===user?.id,env),owner:row.id===user?.id});
   }
   if(path==='/api/profile'&&request.method==='PUT'){
     if(!user)throw fail('Sign in to save profile settings.',401);
@@ -202,7 +206,7 @@ async function route(request,env) {
     const level=clean(body.experienceLevel,30);if(!['curious','beginner','intermediate','advanced'].includes(level))throw fail('Choose an experience level.');
     try{await db.prepare('UPDATE users SET handle=?,display_name=?,bio=?,favorite_language=?,experience_level=?,avatar_kind=?,avatar_value=?,avatar_image=?,theme=?,profile_visibility=?,show_activity=?,email_product_updates=?,updated_at=? WHERE id=?').bind(handle,displayName,clean(body.bio,400),language,level,kind,value,kind==='image'?image:'',theme,visibility,body.showActivity?1:0,body.emailProductUpdates?1:0,now(),user.id).run();}
     catch(error){if(String(error.message||'').includes('UNIQUE constraint failed: users.handle'))throw fail('That handle is already in use.',409);throw error;}
-    const updated=await db.prepare('SELECT * FROM users WHERE id=?').bind(user.id).first();return json({ok:true,user:safeUser(updated,true)});
+    const updated=await db.prepare('SELECT * FROM users WHERE id=?').bind(user.id).first();return json({ok:true,user:safeUser(updated,true,env)});
   }
   throw fail('Not found.',404);
 }
