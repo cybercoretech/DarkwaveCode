@@ -8,10 +8,13 @@
 - [x] Cybercore theme selection backed by the shared Cybergrid registry.
 - [x] Resizable problem/editor layout with keyboard-accessible divider.
 - [x] Starter templates, local debounced draft persistence, reset, and responsive layout.
+- [x] Expanded language picker: 10 additional starter previews plus HTML/CSS; remaining requested runtimes are listed as planned and disabled.
 - [x] GhostKernel device trace simulation with a clear safety boundary.
 - [ ] Replace the textarea with CodeMirror 6 or Monaco after confirming bundle and keymap requirements.
 - [ ] Add Vim/Emacs keymaps and accessible reduced-motion / contrast controls.
 - [ ] Validate interaction and layouts at desktop, tablet, and phone sizes.
+
+The enabled picker entries are editor templates only. The GhostKernel button still runs its bounded teaching simulation; it does not compile these languages. Runtime support must be tracked separately and enabled only after an isolated runner, pinned compiler version, and conformance tests are ready.
 
 ## Stage 2 — Playground
 

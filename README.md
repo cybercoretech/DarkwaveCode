@@ -6,6 +6,8 @@ DarkwaveCode is a cyberpunk coding workbench focused on learning, safe experimen
 
 This first static preview includes a responsive workbench, draggable problem/editor divider, language starter templates, local draft autosave, a simulated GhostKernel trace, and the Cybercore theme registry. The run button is a teaching simulation, not a compiler. Sign-in and the curl installer are intentionally marked as coming later.
 
+The language picker now has starter previews for C#, PowerShell, PHP, Kotlin, Lua, Assembly, Swift, Ruby, Dart, R, and HTML/CSS in addition to the original ten entries. Other languages from the requested list appear as disabled planned entries. These are templates, not executable runtimes.
+
 Serve this directory with any static HTTP server. The first production deployment is live at `https://darkwavecode.pages.dev`.
 
 ### Cloudflare Pages deployment
