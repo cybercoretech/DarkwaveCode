@@ -5,7 +5,7 @@ const EMAIL_FROM = 'darkwavecode@cybercoretech.net';
 const HANDLE = /^[A-Za-z0-9_]{3,24}$/;
 const THEMES = new Set(['cyberpunk/cyberpunk-neon']);
 const LANGUAGES = new Set(['JavaScript','Python','HTML + CSS','SQL','Bash','C','C++','Rust','Zig','Go','Java','C#','TypeScript','PHP','Kotlin','R','MATLAB','Swift','Ruby','Dart','Scala','Julia','Lua','Perl','Fortran','Assembly','Visual Basic','Objective-C','Delphi','SAS','D','COBOL','Haskell','PowerShell','Clojure','Crystal','Elixir','Elm','Erlang','Groovy','Mojo','PureScript']);
-const AVATARS = new Set(['neon-phantom','circuit-witch','void-rider','chrome-fox','pixel-oracle','night-owl','ghost-in-shell','star-forger']);
+const AVATARS = new Set(['neon-phantom','circuit-witch','void-rider','chrome-fox','pixel-oracle','night-owl','ghost-in-shell','star-forger','compiler-imp','stack-sentinel','memory-diver','packet-phantom','root-dragon','opcode-oni','cache-crow','thread-weaver']);
 
 const enc = new TextEncoder();
 const b64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
