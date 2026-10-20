@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "darkwavecode",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-10-20",
+  "vars": {
+    "SITE_ORIGIN": "https://darkwavecode.pages.dev",
+    "CF_ACCOUNT_ID": "f770e07e62b976b12330421edcf2a7d9"
+  },
+  "d1_databases": [
+    {
+      "binding": "AUTH_DB",
+      "database_name": "darkwavecode-accounts",
+      "database_id": "2f1cb47e-e943-4f62-ab25-4367c357752c"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080910">
+<meta name="description" content="Create your DarkwaveCode profile, choose a neon avatar, and control your learning identity and privacy.">
+<title>Account &amp; Profile — DarkwaveCode</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="profile.css">
+</head>
+<body>
+<header class="topbar"><a class="brand" href="index.html"><span class="brand-mark">DW<span>_</span></span><span>DARKWAVE<em>CODE</em></span></a><nav class="main-nav"><a href="workbench.html">Workbench</a><a href="ghostkernel.html">GhostKernel</a><a href="index.html#tracks">Learning tracks</a></nav><div class="top-actions"><label class="theme-control"><span>CYBERCORE THEME</span><select id="themeSelect" aria-label="Choose Cybercore theme"><option>Loading themes…</option></select></label><a class="sign-in" href="profile.html" aria-current="page">ACCOUNT <span>↗</span></a></div></header>
+<main class="account-page shell">
+  <section class="account-hero"><p class="eyebrow">04 / YOUR IDENTITY IN THE GRID</p><h1>ACCOUNT <span>&amp; PROFILE</span></h1><p>Choose the face you bring into the machine. Your email stays private; your handle, avatar, and learning signal are yours to shape.</p></section>
+  <p class="account-status" id="accountStatus" role="status" aria-live="polite">Connecting to the account service…</p>
+  <section class="account-layout">
+    <aside class="auth-panel" id="authPanel">
+      <p class="eyebrow">AUTHENTICATE / JOIN THE GRID</p><h2>WELCOME, <span>BUILDER.</span></h2>
+      <a class="google-auth" id="googleLogin" href="/api/auth/google">CONTINUE WITH GOOGLE <b>↗</b></a>
+      <p class="auth-hint" id="googleStatus">Google sign-in is checking its connection…</p>
+      <div class="auth-divider"><span>OR USE EMAIL</span></div>
+      <div class="auth-tabs" role="tablist"><button type="button" class="selected" data-auth-mode="login" aria-selected="true">SIGN IN</button><button type="button" data-auth-mode="register" aria-selected="false">CREATE ACCOUNT</button></div>
+      <form id="emailForm" class="auth-form">
+        <label class="register-only" hidden>HANDLE<input name="handle" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" autocomplete="username" placeholder="NeonPilot" required></label>
+        <label class="register-only" hidden>DISPLAY NAME<input name="displayName" maxlength="40" placeholder="How you appear around here"></label>
+        <label>EMAIL ADDRESS<input name="email" type="email" maxlength="254" autocomplete="email" required placeholder="you@example.com"></label>
+        <label>PASSWORD<input name="password" type="password" minlength="12" maxlength="128" autocomplete="current-password" required placeholder="12 characters minimum"></label>
+        <p class="auth-hint register-only" hidden>Email verification is required before your account can sign in. Your address is never shown on your public profile.</p>
+        <button class="button primary auth-submit" id="emailSubmit">SIGN IN <b>↗</b></button>
+        <div class="auth-help"><button type="button" id="forgotPassword">FORGOT PASSWORD?</button><button type="button" id="resendVerification" hidden>RESEND VERIFICATION</button></div>
+      </form>
+      <form id="resetForm" class="auth-form" hidden><p>Choose a new password for this account.</p><label>NEW PASSWORD<input name="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required></label><button class="button primary auth-submit">RESET PASSWORD <b>↗</b></button></form>
+      <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+      <button type="button" id="logoutButton" class="logout-button" hidden>LOG OUT ↗</button>
+    </aside>
+    <section class="profile-panel">
+      <div class="profile-title-row"><div><p class="eyebrow">USER PROFILE / CONTROL DECK</p><h2>BUILD YOUR <span>CALLSIGN.</span></h2></div><span class="profile-sync" id="profileSync">LOCAL DRAFT</span></div>
+      <div id="publicProfile" class="public-profile" hidden></div>
+      <form id="profileForm" class="profile-form">
+        <div class="avatar-preview-row"><div class="avatar-preview" id="avatarPreview" aria-label="Avatar preview">👾</div><div><strong id="previewName">New Night Coder</strong><span id="previewHandle">@your_handle</span><small>Your avatar and handle form your public signature.</small></div></div>
+        <fieldset class="avatar-field"><legend>01 / CHOOSE AN AVATAR</legend><p>Pick an original Darkwave portrait, a favorite emoji, or upload your own picture.</p>
+          <div class="avatar-grid" role="radiogroup" aria-label="Custom DarkwaveCode avatars">
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="neon-phantom" aria-label="Neon Phantom"><img src="avatars/neon-phantom.svg" alt=""><span>NEON PHANTOM</span></button>
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="circuit-witch" aria-label="Circuit Witch"><img src="avatars/circuit-witch.svg" alt=""><span>CIRCUIT WITCH</span></button>
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="void-rider" aria-label="Void Rider"><img src="avatars/void-rider.svg" alt=""><span>VOID RIDER</span></button>
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="chrome-fox" aria-label="Chrome Fox"><img src="avatars/chrome-fox.svg" alt=""><span>CHROME FOX</span></button>
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="pixel-oracle" aria-label="Pixel Oracle"><img src="avatars/pixel-oracle.svg" alt=""><span>PIXEL ORACLE</span></button>
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="night-owl" aria-label="Night Owl"><img src="avatars/night-owl.svg" alt=""><span>NIGHT OWL</span></button>
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="ghost-in-shell" aria-label="Ghost in Shell"><img src="avatars/ghost-in-shell.svg" alt=""><span>GHOST IN SHELL</span></button>
+            <button type="button" class="avatar-option" data-avatar-kind="art" data-avatar-value="star-forger" aria-label="Star Forger"><img src="avatars/star-forger.svg" alt=""><span>STAR FORGER</span></button>
+          </div>
+          <div class="emoji-picker" role="group" aria-label="Emoji avatars"><span>EMOJI SIGNAL</span><button type="button" data-avatar-kind="emoji" data-avatar-value="👾" aria-label="Space invader">👾</button><button type="button" data-avatar-kind="emoji" data-avatar-value="🦇" aria-label="Bat">🦇</button><button type="button" data-avatar-kind="emoji" data-avatar-value="👻" aria-label="Ghost">👻</button><button type="button" data-avatar-kind="emoji" data-avatar-value="🤖" aria-label="Robot">🤖</button><button type="button" data-avatar-kind="emoji" data-avatar-value="🐈‍⬛" aria-label="Black cat">🐈‍⬛</button><button type="button" data-avatar-kind="emoji" data-avatar-value="🦉" aria-label="Owl">🦉</button><button type="button" data-avatar-kind="emoji" data-avatar-value="🧠" aria-label="Brain">🧠</button><button type="button" data-avatar-kind="emoji" data-avatar-value="⚡" aria-label="Lightning">⚡</button><button type="button" data-avatar-kind="emoji" data-avatar-value="🌙" aria-label="Moon">🌙</button><button type="button" data-avatar-kind="emoji" data-avatar-value="🕹️" aria-label="Joystick">🕹️</button></div>
+          <label class="upload-avatar">UPLOAD PROFILE PICTURE<input id="avatarUpload" type="file" accept="image/png,image/jpeg,image/webp"><small>PNG, JPEG or WebP. Automatically resized in your browser; maximum 300 KB.</small></label>
+        </fieldset>
+        <div class="profile-fields">
+          <label>HANDLE<input name="handle" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" required placeholder="NeonPilot"><small>3–24 letters, numbers, or underscores.</small></label>
+          <label>DISPLAY NAME<input name="displayName" maxlength="40" required placeholder="Your display name"></label>
+          <label class="wide-field">BIO<textarea name="bio" maxlength="400" rows="3" placeholder="What are you building in the dark?"></textarea><small>Up to 400 characters.</small></label>
+          <label>FAVORITE LANGUAGE<select name="favoriteLanguage"><option>JavaScript</option><option>Python</option><option>HTML + CSS</option><option>SQL</option><option>Bash</option><option>C</option><option>C++</option><option>Rust</option><option>Zig</option><option>Go</option><option>Java</option><option>C#</option><option>TypeScript</option><option>PHP</option><option>Kotlin</option><option>R</option><option>MATLAB</option><option>Swift</option><option>Ruby</option><option>Dart</option><option>Scala</option><option>Julia</option><option>Lua</option><option>Perl</option><option>Fortran</option><option>Assembly</option><option>Visual Basic</option><option>Objective-C</option><option>Delphi</option><option>SAS</option><option>D</option><option>COBOL</option><option>Haskell</option><option>PowerShell</option><option>Clojure</option><option>Crystal</option><option>Elixir</option><option>Elm</option><option>Erlang</option><option>Groovy</option><option>Mojo</option><option>PureScript</option></select></label>
+          <label>EXPERIENCE<select name="experienceLevel"><option value="curious">Curious / exploring</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></label>
+          <label>CYBERCORE THEME<select name="theme" id="profileTheme"><option value="cyberpunk/cyberpunk-neon">Cyberpunk Neon</option></select><small>Uses the same Cybercore theme pack as the site.</small></label>
+          <label>PROFILE VISIBILITY<select name="profileVisibility"><option value="public">Public — anyone can view</option><option value="members">Members — signed-in users</option><option value="private">Private — only me</option></select></label>
+        </div>
+        <fieldset class="privacy-field"><legend>02 / PRIVACY &amp; SIGNALS</legend><label class="check-row"><input name="showActivity" type="checkbox" checked><span>Show a subtle “recently active” signal on my public profile</span></label><label class="check-row"><input name="emailProductUpdates" type="checkbox"><span>Send occasional DarkwaveCode release notes and learning updates</span></label><p>Email address and Google identity are never displayed on a public profile. Account and security notices remain enabled.</p></fieldset>
+        <div class="profile-actions"><button class="button primary" type="submit" id="saveProfile">SAVE PROFILE <b>↗</b></button><button class="button" type="button" id="shareProfile" hidden>COPY PROFILE LINK <b>⧉</b></button><button class="button" type="button" id="discardDraft">RESET LOCAL DRAFT</button></div>
+        <p class="profile-feedback" id="profileFeedback" role="status" aria-live="polite">Changes save in this browser until you sign in. Sign in to sync your profile.</p>
+      </form>
+    </section>
+  </section>
+</main>
+<footer class="dw-site-footer"><div class="dw-footer-divider" aria-hidden="true"></div><div class="shell dw-footer-grid">
+  <section class="dw-footer-contact"><p class="dw-footer-label">DIRECT CONTACT</p><a class="dw-footer-email" href="mailto:darkwavecode@cybercoretech.net">darkwavecode@cybercoretech.net</a><small>DARKWAVECODE / DIRECT INBOX</small><p class="dw-footer-label dw-security-label">SECURITY</p><a class="dw-footer-email" href="mailto:security@cybercoretech.net">security@cybercoretech.net</a><small>VULNERABILITY REPORTS / PRIVATE INBOX</small></section>
+  <section class="dw-footer-signals"><p class="dw-footer-label">SIGNAL CHANNELS</p><a class="dw-footer-home" href="https://darkwavecode.pages.dev/"><span class="dw-signal-glyph">⌘</span><span><small>HOME BASE</small><strong>DARKWAVECODE</strong><em>THE CYBERPUNK CODING WORKBENCH</em></span><b>→</b></a><a class="dw-signal-link" href="https://github.com/cybercoretech/DarkwaveCode" target="_blank" rel="noopener noreferrer"><span>GH</span> GITHUB <i>/ DARKWAVECODE</i> ↗</a><a class="dw-signal-link" href="https://discord.gg/vBMcK5wAx" target="_blank" rel="noopener noreferrer"><span>DC</span> DISCORD <i>/ CYBERCORE</i> ↗</a></section>
+  <section class="dw-footer-support"><p class="dw-footer-label">SUPPORT THE WORK</p><a class="dw-donation-button" href="https://www.paypal.com/paypalme/cybercoretech" target="_blank" rel="noopener noreferrer"><span>PP</span> DONATE WITH PAYPAL ↗</a><a class="dw-donation-button" href="https://buymeacoffee.com/cybercoretech" target="_blank" rel="noopener noreferrer"><span>BM</span> BUY ME A COFFEE ↗</a><small>MIT licensed · cybercoretech.net</small></section>
+</div><div class="shell dw-footer-bottom"><span class="dw-footer-mark">DW<span>_</span></span><span>DarkwaveCode · MIT licensed · Cybercore Tech</span><nav><a href="https://github.com/cybercoretech/DarkwaveCode" target="_blank" rel="noopener noreferrer">GitHub</a><a href="index.html">Home</a><a href="workbench.html">Workbench</a></nav></div></footer>
+<script src="profile.js" defer></script>
+</body></html>
