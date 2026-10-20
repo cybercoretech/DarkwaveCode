@@ -27,19 +27,29 @@ jobs:
         shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_D1_API_TOKEN: ${{ secrets.CLOUDFLARE_D1_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          if [[ -n "$CLOUDFLARE_API_TOKEN" && -n "$CLOUDFLARE_ACCOUNT_ID" ]]; then
+          if [[ -n "$CLOUDFLARE_API_TOKEN" && -n "$CLOUDFLARE_D1_API_TOKEN" && -n "$CLOUDFLARE_ACCOUNT_ID" ]]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in repository Settings > Secrets and variables > Actions to enable deployment."
+            echo "::warning::Add CLOUDFLARE_API_TOKEN, CLOUDFLARE_D1_API_TOKEN, and CLOUDFLARE_ACCOUNT_ID in repository Settings > Secrets and variables > Actions to enable deployment."
           fi
 
       - name: Prepare public site assets
         run: |
           mkdir -p "$RUNNER_TEMP/darkwavecode-pages"
-          cp -a ./*.html ./*.css ./*.js ./_headers ./favicon.svg ./data ./avatars "$RUNNER_TEMP/darkwavecode-pages/"
+          cp -a ./*.html ./*.css ./*.js ./_worker.js ./_headers ./favicon.svg ./data ./avatars "$RUNNER_TEMP/darkwavecode-pages/"
+
+      - name: Apply account database migrations
+        if: steps.cloudflare.outputs.ready == 'true'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_D1_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.151.2"
+          command: d1 migrations apply darkwavecode-accounts --remote
 
       - name: Upload site and Pages Worker
         if: steps.cloudflare.outputs.ready == 'true'

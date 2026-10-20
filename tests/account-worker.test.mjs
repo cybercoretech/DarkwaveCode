@@ -5,9 +5,9 @@ import { readFile } from 'node:fs/promises';
 const source=await readFile(new URL('../_worker.js',import.meta.url),'utf8');
 const {default:worker}=await import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
 
-function fakeDb(user=null){
+function fakeDb(user=null,banned=false){
  const writes=[];
- return {writes,prepare(sql){let args=[];return {bind(...values){args=values;return this},async first(){if(sql.startsWith('SELECT count,window_started'))return null;if(sql.includes('FROM sessions s JOIN users u'))return user;return null},async run(){writes.push({sql,args});return {success:true}},async all(){return {results:[]}}}},async batch(items){for(const item of items)await item.run()}};
+ return {writes,prepare(sql){let args=[];return {bind(...values){args=values;return this},async first(){if(sql.startsWith('SELECT count,window_started'))return null;if(sql.includes('FROM sessions s JOIN users u'))return user;if(sql.includes('FROM user_bans'))return banned?{banned_until:null}:null;return null},async run(){writes.push({sql,args});return {success:true}},async all(){return {results:[]}}}},async batch(items){for(const item of items)await item.run()}};
 }
 
 test('static assets pass through the Pages asset binding',async()=>{
@@ -54,4 +54,43 @@ test('anonymous users cannot read account profiles',async()=>{
 test('preview deployment cannot mutate production account data',async()=>{
  const response=await worker.fetch(new Request('https://preview.darkwavecode.pages.dev/api/auth/email/register',{method:'POST',headers:{Origin:'https://preview.darkwavecode.pages.dev','Content-Type':'application/json'},body:'{}'}),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
  assert.equal(response.status,403);
+});
+
+test('private admin overview rejects signed-in non-admin accounts',async()=>{
+ const member={id:'member',email:'member@example.com',email_verified:1,google_sub:'member-google',handle:'member01',display_name:'Member'};
+ const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/admin/overview',{headers:{Cookie:'dwc_session=test-session'}}),{AUTH_DB:fakeDb(member),ADMIN_EMAIL:'darkstardevx@gmail.com',SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(response.status,403);
+});
+
+test('active bans deny access even when an old session cookie remains',async()=>{
+ const member={id:'member',email:'member@example.com',email_verified:1,google_sub:'member-google',handle:'member01',display_name:'Member'};
+ const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/profile',{headers:{Cookie:'dwc_session=old-session'}}),{AUTH_DB:fakeDb(member,true),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(response.status,403);assert.match((await response.json()).error,/suspended/i);
+});
+
+test('public site settings provide launch defaults without exposing secrets',async()=>{
+ const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/site/config'),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(response.status,200);const data=await response.json();
+ assert.equal(data.announcement.enabled,false);assert.deepEqual(data.visibleCourses,['javascript','python','htmlcss','sql','bash']);assert.ok(data.visibleLanguages.includes('javascript'));
+});
+
+test('anonymous telemetry stores only daily aggregate events and validates language IDs',async()=>{
+ const db=fakeDb(),request=new Request('https://darkwavecode.pages.dev/api/telemetry',{method:'POST',headers:{Origin:'https://darkwavecode.pages.dev','CF-Connecting-IP':'203.0.113.23','Content-Type':'application/json'},body:JSON.stringify({event:'run',label:'javascript',success:true,durationMs:12})});
+ const response=await worker.fetch(request,{AUTH_DB:db,SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(response.status,200);assert.ok(db.writes.some(write=>write.sql.includes('INSERT INTO telemetry_daily')));assert.ok(!JSON.stringify(db.writes).includes('203.0.113.23'));
+ const invalid=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/telemetry',{method:'POST',headers:{Origin:'https://darkwavecode.pages.dev','Content-Type':'application/json'},body:JSON.stringify({event:'run',label:'made-up-language'})}),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(invalid.status,400);
+});
+
+test('community topics require an authenticated member but reading is public',async()=>{
+ const publicRead=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/community'),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(publicRead.status,200);assert.deepEqual((await publicRead.json()).threads,[]);
+ const create=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/community/thread',{method:'POST',headers:{Origin:'https://darkwavecode.pages.dev','Content-Type':'application/json'},body:JSON.stringify({category:'help',title:'Compiler question',body:'I am learning how the compiler reports type errors.'})}),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(create.status,401);
+});
+
+test('admin console shortcut APIs enforce the verified Google admin role',async()=>{
+ const owner={id:'owner',email:'darkstardevx@gmail.com',email_verified:1,google_sub:'google-sub',handle:'darkstardevx',display_name:'Darkstar Devx'};
+ const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/admin/overview',{headers:{Cookie:'dwc_session=test-session'}}),{AUTH_DB:fakeDb(owner),ADMIN_EMAIL:'darkstardevx@gmail.com',SITE_ORIGIN:'https://darkwavecode.pages.dev'});
+ assert.equal(response.status,200);const data=await response.json();assert.equal(data.health.accountDatabase,true);assert.ok(Array.isArray(data.reports));assert.ok(Array.isArray(data.hiddenContent));
 });

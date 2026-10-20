@@ -60,7 +60,7 @@
   document.querySelector('#previousLesson').addEventListener('click', () => { if (current > 0) { current--; render() } });
   document.querySelector('#nextLesson').addEventListener('click', () => { if (current < track.lessons.length - 1) { current++; render() } });
   document.querySelector('#completeLesson').addEventListener('click', () => {
-    if (!completed.includes(current)) completed.push(current);
+    if (!completed.includes(current)) { completed.push(current); fetch('/api/telemetry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'course_complete',label:trackKey}),keepalive:true}).catch(()=>{}); }
     completed.sort((a, b) => a - b);
     try { localStorage.setItem(storageKey, JSON.stringify(completed)); } catch { document.querySelector('#lessonTip').textContent += ' Progress could not be saved in this browser.' }
     if (current < track.lessons.length - 1) current++;

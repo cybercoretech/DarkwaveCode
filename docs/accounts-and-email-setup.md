@@ -1,6 +1,6 @@
 # DarkwaveCode accounts, Google sign-in, and email
 
-The account service is a same-origin Cloudflare Pages Function in `../_worker.js`. It uses a dedicated D1 database named `darkwavecode-accounts`, bound as `AUTH_DB`. Apply `../migrations/0001_accounts.sql` before deploying. The D1 database has been created in Cloudflare (WNAM); its binding is recorded in the root `wrangler.jsonc`.
+The account service is a same-origin Cloudflare Pages Function in `../_worker.js`. It uses a dedicated D1 database named `darkwavecode-accounts`, bound as `AUTH_DB`. Apply the migrations in `../migrations/` before deploying. The D1 database has been created in Cloudflare (WNAM); its binding is recorded in the root `wrangler.jsonc`.
 
 ## Google OAuth
 
@@ -48,13 +48,20 @@ node /path/to/wrangler/bin/wrangler.js pages deploy . --project-name darkwavecod
 
 ## Automatic deployment from GitHub
 
-The GitHub Actions workflow `.github/workflows/pages-deploy.yml` publishes the Direct Upload project on every push to `main`. Add these repository secrets at **Settings → Secrets and variables → Actions**:
+The GitHub Actions workflow `.github/workflows/pages-deploy.yml` applies pending D1 migrations and publishes the Direct Upload project on every push to `main`. Keep the Cloudflare permissions split into two narrowly scoped tokens. Add these repository secrets at **Settings → Secrets and variables → Actions**:
 
-- `CLOUDFLARE_API_TOKEN`: an account API token with **Cloudflare Pages: Edit** permission, scoped to the account hosting this project.
+- `CLOUDFLARE_API_TOKEN`: an account API token with **Cloudflare Pages: Edit**, scoped to the account hosting this project.
+- `CLOUDFLARE_D1_API_TOKEN`: an account API token with **D1: Edit**, scoped to the account hosting this project.
 - `CLOUDFLARE_ACCOUNT_ID`: `f770e07e62b976b12330421edcf2a7d9`.
 
 The token is intentionally not stored in the repository or in the workflow. Until both secrets exist, GitHub Actions cannot deploy. Cloudflare's official guide describes this Direct Upload CI setup: https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/.
 
+## Admin console and telemetry
+
+The private `admin.html` console is available only to the verified Google account whose email matches the Cloudflare `ADMIN_EMAIL` setting. It manages a site-wide announcement, course and Workbench language visibility, member suspensions and restoration, discussion reports and hidden content, and an append-only admin audit trail. Suspensions revoke active sessions immediately and can be timed or permanent. Community members can create topics, reply, and report posts.
+
+First-party telemetry is aggregated by UTC day and category. It records page slug, language selected for a code run, run success, bounded elapsed time, and completed learning tracks. It never records source code, profile handles, email addresses, or raw IP addresses. Anonymous aggregate telemetry is disclosed in the site footer.
+
 ## User profile fields
 
-Profiles support a unique handle, display name, 400-character bio, favorite language, experience level, Cybercore theme, public/member/private visibility, activity visibility, and optional release emails. Email and Google identity are private. Avatars include eight original SVG portraits, emoji choices, and a browser-resized PNG/JPEG/WebP upload.
+Profiles support a unique handle, display name, 400-character bio, favorite language, experience level, Cybercore theme, public/member/private visibility, activity visibility, and optional release emails. Email and Google identity are private. Avatars include 16 original SVG portraits, curated emoji signals, and a browser-resized PNG/JPEG/WebP upload. The verified site administrator sees a `SITE ADMIN` marker and a private console shortcut on the profile page.
