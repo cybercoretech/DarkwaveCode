@@ -10,19 +10,20 @@
 - [x] Starter templates, per-language local drafts, stdin autosave, reset, and responsive layout. JavaScript runs in a bounded worker; Python, Lua, and SQLite run in disposable browser sandboxes.
 - [x] Three-file HTML/CSS/JavaScript Web Studio with a sandboxed live preview, viewport presets, console output, and browser-error reporting.
 - [x] First-run runtime downloads are version-pinned and lazy-loaded. Source code stays in the browser; execution telemetry records only language, outcome, and duration.
-- [x] Keep all 33 language starters selectable in the Workbench and Template Vault, including Lua.
+- [x] Keep all 34 language starters selectable in the Workbench and Template Vault, including Lua and the Cybercore Vex alpha template.
 - [x] GhostKernel interactive virtual memory inspector, simulated device controls, syscall trace, and clear safety boundary.
 - [ ] Replace the textarea with CodeMirror 6 or Monaco after confirming bundle and keymap requirements.
 - [ ] Add Vim/Emacs keymaps and accessible reduced-motion / contrast controls.
 - [ ] Validate interaction and layouts at desktop, tablet, and phone sizes.
 
-The 33-entry language shelf remains available. JavaScript, HTML/CSS/JavaScript, Python, Lua, and SQLite have browser-local execution paths; the other languages remain editable templates and report that no runtime is connected. These browser runtimes are not native compilers or a judge. GhostKernel remains its own deterministic systems simulator. Native compiler support must be tracked separately and enabled only after an isolated runner, pinned compiler version, and conformance tests are ready.
+The 34-entry language shelf remains available. JavaScript, HTML/CSS/JavaScript, Python, Lua, and SQLite have browser-local execution paths; the other languages, including Vex, remain editable templates and report that no runtime is connected. These browser runtimes are not native compilers or a judge. GhostKernel remains its own deterministic systems simulator. Native compiler support must be tracked separately and enabled only after an isolated runner, pinned compiler version, and conformance tests are ready.
 
 ## Stage 2 — Playground
 
 **Browser-first foundations shipped; account sync and hosted compilation remain deferred.**
 
-- [x] Add a themed Docs Deck with searchable references for all 33 Workbench languages; open DevDocs when a docset is available and official references otherwise, in a new browser tab.
+- [x] Add a themed Docs Deck with searchable references for all 34 Workbench languages; open DevDocs when a docset is available and official references otherwise, in a new browser tab.
+- [x] Add the Vex Language Lab and three-module course, with source/roadmap links, sample-to-Workbench handoff, and explicit template-only runtime status.
 
 - [x] Keep the editable language shelf, syntax highlighting, local drafts, stdin/stdout, reset, and actionable runtime-unavailable messages.
 - [x] Add a three-file web editor and responsive local preview with a restricted iframe and console.

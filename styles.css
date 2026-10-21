@@ -125,3 +125,5 @@ body:after{display:none}
 .console-panel pre{max-height:160px}
 @media(max-width:720px){.web-studio-tabs{gap:3px;padding:6px}.web-studio-tabs button{padding:6px;font-size:7px}.web-studio-tabs span{display:none}.web-preview-head{gap:4px;font-size:7px}.web-preview-head button,.web-preview-head select{padding:5px;font-size:7px}.web-preview iframe{height:280px}.editor-options>#shareCode{max-width:76px;overflow:hidden;padding-inline:4px;font-size:6px}}
 @media(max-width:720px){.workbench-mode .editor-top{height:auto;min-height:45px;flex-wrap:wrap;gap:5px;padding:6px 7px}.workbench-mode .editor-top .file-tab{height:auto;min-height:19px;flex:1 1 55px}.workbench-mode .editor-options{width:100%;justify-content:space-between;flex-wrap:wrap;gap:4px}.workbench-mode .editor-options>.small-action{padding:5px 4px;font-size:6px}.workbench-mode .language-select select{max-width:100px}}
+
+.track-grid .vex-track-card{--track:var(--cyan)}

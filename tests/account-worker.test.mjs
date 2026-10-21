@@ -81,7 +81,7 @@ test('active bans deny access even when an old session cookie remains',async()=>
 test('public site settings provide launch defaults without exposing secrets',async()=>{
  const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/site/config'),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
  assert.equal(response.status,200);const data=await response.json();
- assert.equal(data.announcement.enabled,false);assert.deepEqual(data.visibleCourses,['javascript','python','htmlcss','sql','bash']);assert.equal(data.visibleLanguages.length,33);assert.ok(data.visibleLanguages.includes('lua'));
+ assert.equal(data.announcement.enabled,false);assert.deepEqual(data.visibleCourses,['javascript','python','htmlcss','sql','bash','vex']);assert.equal(data.visibleLanguages.length,34);assert.ok(data.visibleLanguages.includes('lua'));assert.ok(data.visibleLanguages.includes('vex'));
 });
 
 test('anonymous telemetry stores only daily aggregate events and validates language IDs',async()=>{

@@ -12,8 +12,8 @@ test('Docs Deck covers every selectable Workbench language exactly once', async 
   const workbench = await readFile(new URL('../workbench.html', import.meta.url), 'utf8');
   const languagePicker = workbench.match(/<select id="languageSelect"[\s\S]*?<\/select>/)?.[0] || '';
   const selectable = [...languagePicker.matchAll(/<option value="([^"]+)"/g)].map(match => match[1]);
-  assert.equal(selectable.length, 33);
-  assert.equal(docs.length, 33);
+  assert.equal(selectable.length, 34);
+  assert.equal(docs.length, 34);
   assert.deepEqual(Array.from(docs, doc => doc.key).sort(), [...selectable].sort());
 });
 
@@ -42,7 +42,7 @@ test('Docs Deck has theme, search, language context, and external-tab affordance
 });
 
 test('the main pages link to Docs Deck and Workbench reference follows selected language', async () => {
-  for (const file of ['index.html','workbench.html','ghostkernel.html','community.html','templates.html','course.html','profile.html']) {
+  for (const file of ['index.html','workbench.html','ghostkernel.html','community.html','templates.html','course.html','profile.html','vexlab.html']) {
     const html = await readFile(new URL(`../${file}`, import.meta.url), 'utf8');
     assert.match(html, /href="docs\.html">Docs Deck<\/a>/, `${file} should expose the Docs Deck`);
   }

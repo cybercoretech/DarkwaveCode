@@ -11,7 +11,7 @@ async function editorContext(){
 
 test('template vault includes a starter for every selectable workbench language',async()=>{
  const context=await editorContext(),templates=context.window.darkwaveStarterTemplates.templates;
- const expected=['c','cpp','python','javascript','rust','go','java','typescript','sql','bash','csharp','powershell','php','kotlin','lua','assembly','swift','ruby','dart','r','htmlcss','zig','scala','julia','perl','haskell','clojure','crystal','elixir','elm','erlang','groovy','purescript'];
+ const expected=['c','cpp','python','javascript','rust','go','java','typescript','sql','bash','csharp','powershell','php','kotlin','lua','assembly','swift','ruby','dart','r','htmlcss','zig','scala','julia','perl','haskell','clojure','crystal','elixir','elm','erlang','groovy','purescript','vex'];
  assert.deepEqual(Object.keys(templates).sort(),expected.sort());
  for(const [language,source]of Object.entries(templates))assert.ok(source.trim(),`${language} has a non-empty starter`);
 });
@@ -32,7 +32,7 @@ test('Workbench keeps runtime-unavailable languages selectable as templates',asy
 
 test('Workbench keeps the full starter shelf and describes local runtime limits',async()=>{
  const html=await readFile(new URL('../workbench.html',import.meta.url),'utf8');
- for(const language of ['javascript','python','c','cpp','java','go','rust','sql','bash','lua','typescript','htmlcss','csharp','powershell','php','kotlin','assembly','swift','ruby','dart','r','zig','scala','julia','perl','haskell','clojure','crystal','elixir','elm','erlang','groovy','purescript'])assert.match(html,new RegExp(`value="${language}"`));
+ for(const language of ['javascript','python','c','cpp','java','go','rust','sql','bash','lua','typescript','htmlcss','csharp','powershell','php','kotlin','assembly','swift','ruby','dart','r','zig','scala','julia','perl','haskell','clojure','crystal','elixir','elm','erlang','groovy','purescript','vex'])assert.match(html,new RegExp(`value="${language}"`));
  assert.match(html,/JavaScript, Python, Lua, SQL, and the Web Studio run locally/i);
  assert.match(html,/other languages are editable templates until a runtime is connected/i);
  assert.match(html,/shareCode/);assert.match(html,/saveTemplate/);assert.match(html,/webStudioTabs/);assert.match(html,/previewFrame/);

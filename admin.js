@@ -1,8 +1,8 @@
 const $ = selector => document.querySelector(selector);
 const languageNames = {
-  c:'C',cpp:'C++',python:'Python 3',javascript:'JavaScript',rust:'Rust',go:'Go',java:'Java',typescript:'TypeScript',sql:'SQL',bash:'Bash / Shell',csharp:'C#',powershell:'PowerShell',php:'PHP',kotlin:'Kotlin',lua:'Lua',assembly:'Assembly Language',swift:'Swift',ruby:'Ruby',dart:'Dart',r:'R',htmlcss:'HTML + CSS',zig:'Zig',scala:'Scala',julia:'Julia',perl:'Perl',haskell:'Haskell',clojure:'Clojure',crystal:'Crystal',elixir:'Elixir',elm:'Elm',erlang:'Erlang',groovy:'Groovy',purescript:'PureScript'
+  c:'C',cpp:'C++',python:'Python 3',javascript:'JavaScript',rust:'Rust',go:'Go',java:'Java',typescript:'TypeScript',sql:'SQL',bash:'Bash / Shell',csharp:'C#',powershell:'PowerShell',php:'PHP',kotlin:'Kotlin',lua:'Lua',assembly:'Assembly Language',swift:'Swift',ruby:'Ruby',dart:'Dart',r:'R',htmlcss:'HTML + CSS',zig:'Zig',scala:'Scala',julia:'Julia',perl:'Perl',haskell:'Haskell',clojure:'Clojure',crystal:'Crystal',elixir:'Elixir',elm:'Elm',erlang:'Erlang',groovy:'Groovy',purescript:'PureScript',vex:'Vex · template only'
 };
-const courseNames = {javascript:'JavaScript',python:'Python','htmlcss':'HTML + CSS',sql:'SQL',bash:'Bash / Shell'};
+const courseNames = {javascript:'JavaScript',python:'Python','htmlcss':'HTML + CSS',sql:'SQL',bash:'Bash / Shell',vex:'Vex Language Lab'};
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 let state = null, range = 30;
 

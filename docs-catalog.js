@@ -33,6 +33,7 @@
     {language:'Erlang',key:'erlang',group:'BEAM / SYSTEMS',provider:'Official',url:'https://www.erlang.org/doc/',summary:'Erlang/OTP manuals and standard-library docs.'},
     {language:'Groovy',key:'groovy',group:'JVM / SCRIPTING',provider:'Official',url:'https://groovy-lang.org/documentation.html',summary:'Groovy language, syntax, and API documentation.'},
     {language:'PureScript',key:'purescript',group:'WEB / FUNCTIONAL',provider:'Official',url:'https://docs.purescript.org/',summary:'PureScript language guide, compiler, and package docs.'},
+    {language:'Vex',key:'vex',group:'CYBERCORE / LANGUAGE LAB',provider:'Official',url:'https://github.com/cybercoretech/vexlang/tree/main/docs',official:'https://github.com/cybercoretech/vexlang',abbr:'vx',summary:'Cybercore’s alpha language reference, interpreter, typed IR, and backend notes.'},
   ];
   window.darkwaveDocsCatalog = docs;
 })();

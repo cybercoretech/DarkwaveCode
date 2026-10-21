@@ -5,7 +5,7 @@
   const track = tracks[trackKey];
   if (!track) {
     document.querySelector('#courseTitle').innerHTML = 'TRACK <span>NOT FOUND</span>';
-    document.querySelector('#courseIntro').textContent = 'Choose one of the five foundation tracks to begin.';
+    document.querySelector('#courseIntro').textContent = 'Choose a foundation track or the Vex Language Lab to begin.';
     document.querySelector('.course-layout').innerHTML = '<div class="lesson-panel"><a class="button primary" href="index.html#tracks">BROWSE TRACKS ↗</a></div>';
     return;
   }

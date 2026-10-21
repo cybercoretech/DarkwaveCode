@@ -21,6 +21,7 @@ const templates={
  ruby:'puts "Hello, DarkwaveCode"',
  dart:'void main() {\n  // GhostKernel simulated device lesson\n  final status = GhostKernel.sysCall("WAKE", 1);\n  print("device status: $status");\n}',
  r:'# GhostKernel simulated device lesson\nstatus <- ghostkernel_sys_call("WAKE", 1)\ncat("device status:", status, "\\n")',
+ vex:'// Vex Language Lab · interpreter-ready syntax\nlet signal: i32 = 2;\nlet response = signal * 21;\nprintln("signal response:");\nresponse;',
  htmlcss:'<!-- GhostKernel lesson workspace · HTML/CSS preview -->\n<main class="device-card">\n  <h1>DEVICE_01</h1>\n  <p class="status">Awaiting simulated WAKE call</p>\n</main>\n<style>\n  body { background: #080910; color: #21e6ff; font-family: monospace; }\n  .device-card { border: 1px solid #21e6ff; padding: 1.5rem; }\n</style>'
 };
 Object.assign(templates,Object.fromEntries(Object.entries(window.darkwaveExtraLanguages||{}).map(([key,value])=>[key,value.source])));
