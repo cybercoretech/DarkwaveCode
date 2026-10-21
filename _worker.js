@@ -76,6 +76,7 @@ async function makeEmailToken(db,userId,purpose) {
 async function route(request,env) {
   const url=new URL(request.url), path=url.pathname;
   const db=env.AUTH_DB;
+  if(path==='/admin'||path==='/admin/'||path==='/admin.html')return new Response('Not Found.',{status:404,headers:{'Cache-Control':'no-store','X-Robots-Tag':'noindex'}});
   if(!path.startsWith('/api/')) return env.ASSETS.fetch(request);
   if(!db)return json({error:'Accounts are not connected yet. The site administrator must finish Cloudflare D1 setup.'},503);
   if(request.method==='OPTIONS')return new Response(null,{status:204,headers:{Allow:'GET, POST, PUT, OPTIONS'}});

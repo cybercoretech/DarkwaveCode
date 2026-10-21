@@ -15,6 +15,16 @@ test('static assets pass through the Pages asset binding',async()=>{
  assert.equal(response.status,200);assert.equal(await response.text(),'profile asset');
 });
 
+test('legacy admin URLs are blocked while the deep console route passes through',async()=>{
+ let requested='';const env={ASSETS:{fetch:async request=>{requested=new URL(request.url).pathname;return new Response('asset')}}};
+ for(const path of ['/admin','/admin/','/admin.html']){
+  const response=await worker.fetch(new Request(`https://darkwavecode.pages.dev${path}`),env);
+  assert.equal(response.status,404);assert.equal(response.headers.get('Cache-Control'),'no-store');
+ }
+ const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/signal/archives/night/phantom-7c4a/console.html'),env);
+ assert.equal(response.status,200);assert.equal(requested,'/signal/archives/night/phantom-7c4a/console.html');
+});
+
 test('account status reports provider readiness without exposing identity data',async()=>{
  const response=await worker.fetch(new Request('https://darkwavecode.pages.dev/api/auth/status'),{AUTH_DB:fakeDb(),SITE_ORIGIN:'https://darkwavecode.pages.dev'});
  assert.deepEqual(await response.json(),{ready:false,emailReady:false,user:null});
