@@ -5,6 +5,7 @@
   const $ = selector => document.querySelector(selector);
   const languageSelect = $('#languageSelect');
   const languageReference = $('#languageReference');
+  const templateReference = $('#templateReference');
   const stdinInput = $('#stdinInput');
   const output = $('#output');
   const runState = $('#runState');
@@ -47,9 +48,11 @@
   else if (validLanguage(params.get('lang'))) languageSelect.value = params.get('lang');
   let activeLanguage = languageSelect.value;
   const updateLanguageReference = language => {
-    if (!languageReference) return;
-    languageReference.href = `docs.html?lang=${encodeURIComponent(language)}`;
-    languageReference.textContent = `${language === 'htmlcss' ? 'WEB' : language.toUpperCase()} REFERENCE ↗`;
+    if (languageReference) {
+      languageReference.href = `docs.html?lang=${encodeURIComponent(language)}`;
+      languageReference.textContent = `${language === 'htmlcss' ? 'WEB' : language.toUpperCase()} REFERENCE ↗`;
+    }
+    if (templateReference) templateReference.href = `templates.html?lang=${encodeURIComponent(language)}`;
   };
   updateLanguageReference(activeLanguage);
   if (shared?.files && activeLanguage === 'htmlcss') webFiles = {...webFiles, ...shared.files};
@@ -128,7 +131,11 @@
   function updateRuntimeMode() {
     const lang = languageSelect.value;
     const local = window.darkwaveLocalRuntimeIds?.includes(lang);
-    $('#runtimeMode').textContent = local ? (lang === 'htmlcss' ? 'WEB STUDIO · PREVIEW' : `${lang.toUpperCase()} · LOCAL`) : cloudRuntimes.has(lang) ? `${lang.toUpperCase()} · CLOUD SANDBOX` : `${lang.toUpperCase()} · TEMPLATE ONLY`;
+    const cloud = cloudRuntimes.has(lang);
+    $('#runtimeMode').textContent = local ? (lang === 'htmlcss' ? 'WEB STUDIO · PREVIEW' : `${lang.toUpperCase()} · LOCAL`) : cloud ? `${lang.toUpperCase()} · CLOUD SANDBOX` : `${lang.toUpperCase()} · TEMPLATE ONLY`;
+    const mode = local ? (lang === 'htmlcss' ? 'RESTRICTED PREVIEW' : lang === 'vex' ? 'LOCAL WASM WORKER' : lang === 'javascript' ? 'LOCAL WORKER' : 'ISOLATED FRAME') : cloud ? 'CLOUD SANDBOX' : 'TEMPLATE ONLY';
+    $('#runtimeScope').textContent = mode;
+    $('#stdinStatus').textContent = cloud ? 'runtime input · saved locally' : lang === 'python' ? 'Python input() · saved locally' : 'Python only · saved locally';
   }
   async function loadCloudRuntimes() {
     const config = window.DARKWAVE_RUNNER || {};
@@ -189,6 +196,11 @@
     finally { isRunning = false; button.disabled = false; recordRun(language, success, performance.now() - start); }
   }
   $('#runCode').addEventListener('click', runCode);
+  $('#copyOutput').addEventListener('click', async () => {
+    if (!output.textContent.trim()) { runState.textContent = 'NO OUTPUT TO COPY'; return; }
+    try { await navigator.clipboard.writeText(output.textContent); runState.textContent = 'OUTPUT COPIED'; }
+    catch { runState.textContent = 'CLIPBOARD BLOCKED · SELECT OUTPUT TO COPY'; }
+  });
   $('#clearOutput').addEventListener('click', () => { output.textContent = 'Console cleared. Your source remains saved locally.'; runState.textContent = 'WAITING FOR RUN'; });
   $('#resetCode').addEventListener('click', () => {
     if (!confirm('Reset this local draft to the starter template?')) return;

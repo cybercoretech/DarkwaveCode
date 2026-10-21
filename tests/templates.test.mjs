@@ -33,8 +33,10 @@ test('Workbench keeps runtime-unavailable languages selectable as templates',asy
 test('Workbench keeps the full starter shelf and describes local runtime limits',async()=>{
  const html=await readFile(new URL('../workbench.html',import.meta.url),'utf8');
  for(const language of ['javascript','python','c','cpp','java','go','rust','sql','bash','lua','typescript','htmlcss','csharp','powershell','php','kotlin','assembly','swift','ruby','dart','r','zig','scala','julia','perl','haskell','clojure','crystal','elixir','elm','erlang','groovy','purescript','vex'])assert.match(html,new RegExp(`value="${language}"`));
- assert.match(html,/JavaScript, Python, Lua, SQL, and the Web Studio run locally/i);
- assert.match(html,/other languages are editable templates until a runtime is connected/i);
+ assert.match(html,/JavaScript, Python, Lua, SQL, and Vex run locally in this browser/i);
+ assert.match(html,/Most other language entries are editable templates without an execution runtime/i);
+ assert.match(html,/CYBERCORE LANGUAGE LAB · LOCAL WASM/);
+ assert.match(html,/Send your first signal/);assert.match(html,/id="runtimeScope"/);assert.match(html,/id="stdinStatus"/);assert.match(html,/id="copyOutput"/);assert.match(html,/id="templateReference"/);
  assert.match(html,/shareCode/);assert.match(html,/saveTemplate/);assert.match(html,/webStudioTabs/);assert.match(html,/previewFrame/);
  const worker=await readFile(new URL('../_worker.js',import.meta.url),'utf8');
  assert.match(worker,/visibleLanguages:\[\.\.\.LANGUAGE_IDS\]/);
