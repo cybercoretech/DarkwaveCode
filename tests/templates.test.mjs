@@ -45,7 +45,8 @@ test('local runtimes are pinned, lazy, and isolated with bounded output and time
  assert.match(source,/pyodide\/v314\.0\.7/);assert.match(source,/fengari-web@0\.1\.4/);assert.match(source,/sql\.js@1\.13\.0/);
  assert.match(source,/setAttribute\('sandbox', 'allow-scripts'\)/);assert.match(source,/MAX_OUTPUT = 12000/);assert.match(source,/timeoutMs = language === 'python' \? 45000/);
  assert.match(source,/language === 'lua' \? "'unsafe-eval'"/);assert.match(source,/language === 'lua' \? "'none'"/);
- assert.match(source,/darkwaveLocalRuntimeIds = \['javascript', 'htmlcss', 'python', 'lua', 'sql'\]/);
+ assert.match(source,/darkwaveLocalRuntimeIds = \['javascript', 'htmlcss', 'python', 'lua', 'sql', 'vex'\]/);
+ assert.match(source,/source\.length > 64000/);assert.match(source,/Vex was stopped after 12 seconds/);
 });
 
 test('Web Studio preview permits local inline projects but blocks network and parent access',async()=>{

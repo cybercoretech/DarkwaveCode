@@ -40,7 +40,7 @@ jobs:
       - name: Prepare public site assets
         run: |
           mkdir -p "$RUNNER_TEMP/darkwavecode-pages"
-          cp -a ./*.html ./*.css ./*.js ./_headers ./favicon.svg ./data ./avatars ./signal "$RUNNER_TEMP/darkwavecode-pages/"
+          cp -a ./*.html ./*.css ./*.js ./_headers ./favicon.svg ./data ./avatars ./signal ./vex-runtime "$RUNNER_TEMP/darkwavecode-pages/"
 
       - name: Apply account database migrations
         if: steps.cloudflare.outputs.ready == 'true'

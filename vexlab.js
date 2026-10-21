@@ -31,10 +31,29 @@
     document.querySelector('#vexExampleBody').textContent = example.body;
     document.querySelector('#vexExampleCode').textContent = example.code;
     document.querySelector('#vexExampleResult').textContent = example.result;
+    document.querySelector('#vexRunResult').textContent = 'Runtime ready. Select RUN IN BROWSER to execute this example.';
+    document.querySelector('#vexExampleState').textContent = 'LOCAL WASM · READY';
     buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.vexExample === key)));
     document.querySelector('#loadVexSample').dataset.example = key;
   };
   buttons.forEach(button => button.addEventListener('click', () => setExample(button.dataset.vexExample)));
+  document.querySelector('#runVexSample').addEventListener('click', async event => {
+    const example = examples[document.querySelector('#loadVexSample').dataset.example];
+    const button = event.currentTarget, result = document.querySelector('#vexRunResult'), state = document.querySelector('#vexExampleState');
+    if (!example || button.disabled) return;
+    button.disabled = true;
+    result.textContent = 'Starting the local WebAssembly interpreter…';
+    state.textContent = 'EXECUTING';
+    try {
+      let output = '';
+      await window.darkwaveRunLocalRuntime('vex', example.code, '', text => { output += text; });
+      result.textContent = output.trim() || 'Program completed without output.';
+      state.textContent = 'LOCAL WASM · COMPLETE';
+    } catch (error) {
+      result.textContent = `RUNTIME ERROR · ${error.message}`;
+      state.textContent = 'EXECUTION STOPPED';
+    } finally { button.disabled = false; }
+  });
   document.querySelector('#loadVexSample').addEventListener('click', event => {
     const example = examples[event.currentTarget.dataset.example];
     if (!example) return;

@@ -82,9 +82,47 @@
     });
   }
 
+  function runVex(source, onOutput) {
+    if (source.length > 64000) return Promise.reject(new Error('Vex source limit reached (64 KB).'));
+    return new Promise((resolve, reject) => {
+      let worker, ended = false;
+      let timer;
+      const finish = (error, result) => {
+        if (ended) return;
+        ended = true;
+        clearTimeout(timer);
+        worker?.terminate();
+        error ? reject(error) : resolve(result);
+      };
+      try {
+        worker = new Worker(new URL('vex-worker.js', document.baseURI), {type:'module', name:'darkwave-vex-runtime'});
+      } catch {
+        finish(new Error('The Vex WebAssembly worker could not start.'));
+        return;
+      }
+      timer = setTimeout(() => finish(new Error('Vex was stopped after 12 seconds. Check for an infinite loop or expensive program.')), 12000);
+      worker.onmessage = event => {
+        if (event.data?.type === 'failed') return finish(new Error(String(event.data.error || 'Vex runtime failed.').slice(0, 3000)));
+        if (event.data?.type !== 'result') return;
+        const result = event.data.result;
+        const text = `${result.stdout || ''}${result.value && result.value !== 'Unit' ? `\n=> ${result.value}\n` : ''}`;
+        if (text) onOutput(text.slice(0, MAX_OUTPUT));
+        if (!result.ok) return finish(new Error(String(result.error || 'Vex program failed.').slice(0, 3000)));
+        if (text.length > MAX_OUTPUT) return finish(new Error('Output limit reached (12 KB).'));
+        finish(null, result);
+      };
+      worker.onerror = event => finish(new Error(event.message || 'Vex WebAssembly could not be loaded.'));
+      worker.postMessage({source});
+    });
+  }
+
   window.darkwaveRunLocalRuntime = (language, source, stdin, onOutput) => {
+    if (language === 'vex') {
+      if (stdin?.trim()) return Promise.reject(new Error('Vex does not have a standard-input function yet; clear stdin and run again.'));
+      return runVex(source, onOutput);
+    }
     if (!['python', 'lua', 'sql'].includes(language)) return Promise.reject(new Error('This local runtime is not available.'));
     return runInFrame(language, source, stdin || '', onOutput);
   };
-  window.darkwaveLocalRuntimeIds = ['javascript', 'htmlcss', 'python', 'lua', 'sql'];
+  window.darkwaveLocalRuntimeIds = ['javascript', 'htmlcss', 'python', 'lua', 'sql', 'vex'];
 })();
