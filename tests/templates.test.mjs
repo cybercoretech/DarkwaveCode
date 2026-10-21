@@ -29,3 +29,11 @@ test('Workbench keeps runtime-unavailable languages selectable as templates',asy
  assert.match(app,/TEMPLATE ONLY/);
  assert.match(app,/darkwavecode-draft:\$\{language\}/);
 });
+
+test('Workbench keeps all language templates available and identifies local runtime limits',async()=>{
+ const html=await readFile(new URL('../workbench.html',import.meta.url),'utf8');
+ for(const language of ['javascript','python','c','cpp','java','go','rust','sql','bash','lua','typescript','htmlcss','csharp','powershell','php','kotlin','assembly','swift','ruby','dart','r','zig','scala','julia','perl','haskell','clojure','crystal','elixir','elm','erlang','groovy','purescript'])assert.match(html,new RegExp(`value="${language}"`));
+ assert.match(html,/template-only until a compiler service is connected/i);
+ const worker=await readFile(new URL('../_worker.js',import.meta.url),'utf8');
+ assert.match(worker,/visibleLanguages:\[\.\.\.LANGUAGE_IDS\]/);
+});

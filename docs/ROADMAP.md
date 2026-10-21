@@ -8,13 +8,13 @@
 - [x] Cybercore theme selection backed by the shared Cybergrid registry.
 - [x] Resizable problem/editor layout with keyboard-accessible divider.
 - [x] Starter templates, local debounced draft persistence, reset, and responsive layout. JavaScript has a bounded local worker runner; other language selections clearly report that no runtime is connected.
-- [x] Expanded language picker: 33 selectable starter templates, including Zig, Scala, Julia, Perl, Haskell, Clojure, Crystal, Elixir, Elm, Erlang, Groovy, and PureScript; other requested languages remain listed as planned.
+- [x] Keep all 33 language starters selectable in the Workbench and Template Vault, including Lua.
 - [x] GhostKernel interactive virtual memory inspector, simulated device controls, syscall trace, and clear safety boundary.
 - [ ] Replace the textarea with CodeMirror 6 or Monaco after confirming bundle and keymap requirements.
 - [ ] Add Vim/Emacs keymaps and accessible reduced-motion / contrast controls.
 - [ ] Validate interaction and layouts at desktop, tablet, and phone sizes.
 
-The enabled picker entries are editor templates only. GhostKernel remains its own deterministic systems simulator. The Workbench runs JavaScript in a sandboxed browser worker with an execution timeout and output cap. All other language entries remain templates and report that no runtime is connected. Native compiler support must be tracked separately and enabled only after an isolated runner, pinned compiler version, and conformance tests are ready.
+The enabled picker entries are editor templates only. GhostKernel remains its own deterministic systems simulator. The Workbench runs JavaScript in a sandboxed browser worker with an execution timeout and output cap. All other languages remain editable templates and report that no runtime is connected until a compiler service is provisioned. Native compiler support must be tracked separately and enabled only after an isolated runner, pinned compiler version, and conformance tests are ready.
 
 ## Stage 2 — Playground
 
