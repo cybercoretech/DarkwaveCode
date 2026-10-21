@@ -22,6 +22,8 @@ The 33-entry language shelf remains available. JavaScript, HTML/CSS/JavaScript, 
 
 **Browser-first foundations shipped; account sync and hosted compilation remain deferred.**
 
+- [x] Add a themed Docs Deck with searchable references for all 33 Workbench languages; open DevDocs when a docset is available and official references otherwise, in a new browser tab.
+
 - [x] Keep the editable language shelf, syntax highlighting, local drafts, stdin/stdout, reset, and actionable runtime-unavailable messages.
 - [x] Add a three-file web editor and responsive local preview with a restricted iframe and console.
 - [x] Add browser-local Python, Lua, and SQLite execution with time/output caps.

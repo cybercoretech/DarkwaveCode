@@ -4,6 +4,7 @@
   window.DARKWAVE_WORKBENCH_UPGRADES = true;
   const $ = selector => document.querySelector(selector);
   const languageSelect = $('#languageSelect');
+  const languageReference = $('#languageReference');
   const stdinInput = $('#stdinInput');
   const output = $('#output');
   const runState = $('#runState');
@@ -45,6 +46,12 @@
   else if (courseMission && validLanguage(courseMission.language)) languageSelect.value = courseMission.language;
   else if (validLanguage(params.get('lang'))) languageSelect.value = params.get('lang');
   let activeLanguage = languageSelect.value;
+  const updateLanguageReference = language => {
+    if (!languageReference) return;
+    languageReference.href = `docs.html?lang=${encodeURIComponent(language)}`;
+    languageReference.textContent = `${language === 'htmlcss' ? 'WEB' : language.toUpperCase()} REFERENCE ↗`;
+  };
+  updateLanguageReference(activeLanguage);
   if (shared?.files && activeLanguage === 'htmlcss') webFiles = {...webFiles, ...shared.files};
   const loadDraft = language => {
     if (language === 'htmlcss') return webFiles[activeWebFile];
@@ -111,6 +118,7 @@
     if (activeLanguage === 'htmlcss') { webFiles[activeWebFile] = editor.value; try { localStorage.setItem(webKey(activeWebFile), editor.value); } catch {} }
     else { try { localStorage.setItem(`darkwavecode-draft:${activeLanguage}`, editor.value); } catch {} }
     activeLanguage = event.target.value;
+    updateLanguageReference(activeLanguage);
     setWebMode(activeLanguage === 'htmlcss');
     fileTab(activeLanguage);
     editor.value = loadDraft(activeLanguage) || (activeLanguage === 'javascript' ? starter : '');
