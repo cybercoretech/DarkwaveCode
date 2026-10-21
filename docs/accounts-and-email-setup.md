@@ -58,7 +58,7 @@ The token is intentionally not stored in the repository or in the workflow. Unti
 
 ## Admin console and telemetry
 
-The private `admin.html` console is available only to the verified Google account whose email matches the Cloudflare `ADMIN_EMAIL` setting. It manages a site-wide announcement, course and Workbench language visibility, member suspensions and restoration, discussion reports and hidden content, and an append-only admin audit trail. Suspensions revoke active sessions immediately and can be timed or permanent. Community members can create topics, reply, and report posts.
+The Night Office console is linked from the profile of the verified Google account whose email matches the Cloudflare `ADMIN_EMAIL` setting. It manages a site-wide announcement, course and Workbench language visibility, member suspensions and restoration, discussion reports and hidden content, and an append-only admin audit trail. Suspensions revoke active sessions immediately and can be timed or permanent. Its deep static path is only an obscurity measure; every admin API action is still checked against the authenticated site-admin identity. Community members can create topics, reply, and report posts.
 
 First-party telemetry is aggregated by UTC day and category. It records page slug, language selected for a code run, run success, bounded elapsed time, and completed learning tracks. It never records source code, profile handles, email addresses, or raw IP addresses. Anonymous aggregate telemetry is disclosed in the site footer.
 
