@@ -42,7 +42,10 @@
     document.querySelector('#lessonBody').textContent = lesson.body;
     document.querySelector('#lessonExample').textContent = lesson.example;
     document.querySelector('#lessonChallenge').textContent = lesson.challenge;
-    document.querySelector('#lessonTip').textContent = lesson.tip;
+    const hint = document.querySelector('#lessonTip');
+    hint.textContent = lesson.tip;
+    hint.hidden = true;
+    document.querySelector('#revealHint').textContent = 'REVEAL FIELD HINT +';
     buttons.forEach((button, index) => {
       button.classList.toggle('active', index === current);
       button.setAttribute('aria-current', index === current ? 'step' : 'false');
@@ -59,6 +62,21 @@
   };
   document.querySelector('#previousLesson').addEventListener('click', () => { if (current > 0) { current--; render() } });
   document.querySelector('#nextLesson').addEventListener('click', () => { if (current < track.lessons.length - 1) { current++; render() } });
+  document.querySelector('#revealHint').addEventListener('click', event => {
+    const hint = document.querySelector('#lessonTip');
+    hint.hidden = !hint.hidden;
+    event.currentTarget.textContent = hint.hidden ? 'REVEAL FIELD HINT +' : 'HIDE FIELD HINT −';
+  });
+  document.querySelector('#openMission').addEventListener('click', () => {
+    const lesson = track.lessons[current];
+    const language = trackKey === 'htmlcss' ? 'htmlcss' : trackKey;
+    try {
+      sessionStorage.setItem('darkwavecode-course-mission', JSON.stringify({track:trackKey,title:lesson.title,language,code:lesson.example}));
+      location.href = 'workbench.html?from=course';
+    } catch {
+      document.querySelector('#lessonTip').textContent = 'This browser could not prepare the Workbench handoff. Copy the example and open Workbench directly.';
+    }
+  });
   document.querySelector('#completeLesson').addEventListener('click', () => {
     if (!completed.includes(current)) { completed.push(current); fetch('/api/telemetry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'course_complete',label:trackKey}),keepalive:true}).catch(()=>{}); }
     completed.sort((a, b) => a - b);

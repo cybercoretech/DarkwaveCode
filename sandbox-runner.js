@@ -42,10 +42,10 @@
       const workerSource = ` + '`' + `
         const format = value => { try { return typeof value === 'string' ? value : JSON.stringify(value); } catch { return String(value); } };
         const send = (type, text = '') => postMessage({ type, text });
-        console.log = (...values) => send('log', values.map(format).join(' ') + '\\n');
+        console.log = (...values) => send('log', values.map(format).join(' ') + '\\\\n');
         console.info = console.log;
-        console.warn = (...values) => send('log', '[warn] ' + values.map(format).join(' ') + '\\n');
-        console.error = (...values) => send('log', '[error] ' + values.map(format).join(' ') + '\\n');
+        console.warn = (...values) => send('log', '[warn] ' + values.map(format).join(' ') + '\\\\n');
+        console.error = (...values) => send('log', '[error] ' + values.map(format).join(' ') + '\\\\n');
         onmessage = async event => {
           try {
             const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
@@ -61,7 +61,7 @@
         parent.postMessage({ token: payload.token, type: event.data.type, text: event.data.text }, '*');
         if (event.data.type === 'done' || event.data.type === 'failed') worker.terminate();
       };
-      worker.onerror = event => parent.postMessage({ token: payload.token, type: 'failed', text: event.message || 'Worker failed.' }, '*');
+      worker.onerror = event => parent.postMessage({ token: payload.token, type: 'failed', text: (event.message || 'Worker failed.')+' ('+(event.filename || 'worker')+':'+(event.lineno || 0)+':'+(event.colno || 0)+')' }, '*');
       worker.postMessage(payload.source);
     <${'/'}script>`;
     document.body.append(frame);

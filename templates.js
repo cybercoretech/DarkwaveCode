@@ -14,8 +14,8 @@
   let custom = readJSON(userKey, []); if(!Array.isArray(custom))custom=[];
   let favorites = new Set(readJSON(favoriteKey, []));
   let current = null, view = 'all';
-  let availableRuntimes=new Set(['javascript']);
-  const runtimeLabel=language=>language==='javascript'?'LOCAL JS RUNNER':availableRuntimes.has(language)?'RUNNER CONNECTED':'TEMPLATE ONLY';
+  let availableRuntimes=new Set(window.darkwaveLocalRuntimeIds||['javascript']);
+  const runtimeLabel=language=>availableRuntimes.has(language)?(language==='htmlcss'?'LOCAL WEB PREVIEW':'LOCAL BROWSER RUNTIME'):'TEMPLATE ONLY';
   const saveCustom = () => {try{localStorage.setItem(userKey,JSON.stringify(custom))}catch{alert('Browser storage is full. Export your templates, then remove a few saved items.')}};
   const saveFavorites = () => {try{localStorage.setItem(favoriteKey,JSON.stringify([...favorites]))}catch{}};
   const builtins = Object.entries(library).map(([language,code])=>({id:`starter:${language}`,kind:'starter',language,title:`${labels[language]||language} · clean start`,description:`A minimal ${labels[language]||language} starting point from the DarkwaveCode language shelf. Edit a copy, then keep your own version in this browser.`,code,tags:['starter','language']}));
@@ -51,7 +51,7 @@
     const desc=document.createElement('p');desc.className='inspector-description';desc.textContent=item.description||'';
     const meta=document.createElement('div');meta.className='inspector-meta';
     if(item.kind==='pack')meta.innerHTML=`<div><small>MISSION</small><p>${esc(item.prompt)}</p></div><div class="io-preview"><section><small>SAMPLE INPUT</small><pre>${esc(item.stdin||'(none)')}</pre></section><section><small>EXPECTED OUTPUT / TRACE</small><pre>${esc(item.expected)}</pre></section></div>`;
-    else meta.innerHTML=`<div><small>RUNTIME STATUS</small><p>${item.language==='javascript'?'Runs in the local browser sandbox.':availableRuntimes.has(item.language)?'The isolated compiler service lists this runtime as ready.':'Starter is ready to edit. A compiler runtime for this language is not connected yet.'}</p></div>`;
+    else meta.innerHTML=`<div><small>RUNTIME STATUS</small><p>${availableRuntimes.has(item.language)?(item.language==='htmlcss'?'HTML, CSS, and JavaScript render in a restricted browser preview.':'Runs locally in a disposable browser sandbox. The first run downloads its runtime; your source stays in this browser.'):'Starter is ready to edit. A compiler runtime for this language is not connected yet.'}</p></div>`;
     const codeHead=document.createElement('div');codeHead.className='inspector-code-head';codeHead.innerHTML=`<span>${esc(files[item.language]||'source.txt')}</span><span>${item.code.split('\n').length} LINES</span>`;
     const code=document.createElement('pre');code.className='inspector-code';code.innerHTML=window.darkwaveHighlight?window.darkwaveHighlight(item.code,item.language):esc(item.code);
     const actions=document.createElement('div');actions.className='inspector-actions';
@@ -79,6 +79,7 @@
   $('#importButton').addEventListener('click',()=>$('#importTemplates').click());
   $('#importTemplates').addEventListener('change',async event=>{const file=event.target.files?.[0];if(!file)return;try{if(file.size>2_000_000)throw Error('Import file exceeds the 2 MB limit.');const data=JSON.parse(await file.text()),items=Array.isArray(data)?data:data.templates;if(!Array.isArray(items))throw Error('This file does not contain a template list.');let imported=0;for(const raw of items.slice(0,150)){if(!raw||typeof raw!=='object'||!library[raw.language]||typeof raw.title!=='string'||typeof raw.code!=='string'||raw.code.length>50000)continue;custom.unshift({id:`custom:${crypto.randomUUID()}`,kind:'custom',title:raw.title.slice(0,80),language:raw.language,description:String(raw.description||'').slice(0,240),code:raw.code,tags:Array.isArray(raw.tags)?raw.tags.filter(tag=>typeof tag==='string').slice(0,12):[],createdAt:Date.now(),updatedAt:Date.now()});imported++}custom=custom.slice(0,150);saveCustom();renderGrid();alert(`Imported ${imported} template${imported===1?'':'s'}.`)}catch(error){alert(`Import failed: ${error.message}`)}finally{event.target.value=''}});
   renderGrid();
-  const runner=window.DARKWAVE_RUNNER||{};if(runner.url)fetch(`${runner.url}/v1/runtimes`).then(response=>response.ok?response.json():null).then(data=>{if(data?.runtimes){availableRuntimes=new Set(['javascript',...data.runtimes.map(item=>item.id)]);if(current)openInspector(current)}}).catch(()=>{});
+  try { const seed=JSON.parse(sessionStorage.getItem('darkwavecode-template-seed')||'null'); if(seed){sessionStorage.removeItem('darkwavecode-template-seed');$('#templateLanguage').value=seed.language||'javascript';openEditor({kind:'draft',...seed});} } catch {}
+  const runner=window.DARKWAVE_RUNNER||{};if(runner.url)fetch(`${runner.url}/v1/runtimes`).then(response=>response.ok?response.json():null).then(data=>{if(data?.runtimes){availableRuntimes=new Set([...(window.darkwaveLocalRuntimeIds||['javascript']),...data.runtimes.map(item=>item.id)]);if(current)openInspector(current)}}).catch(()=>{});
   const requestedLanguage=$('#templateLanguage').value,requested=allItems().find(item=>item.kind==='starter'&&item.language===requestedLanguage);if(requested&&requestedLanguage!=='all')openInspector(requested);
 })();
